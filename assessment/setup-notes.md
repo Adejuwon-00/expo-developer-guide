@@ -23,6 +23,10 @@ were customized at this stage. The included documentation remains sample content
   `npm ci --fetch-retries=3 --no-audit --no-fund` completed successfully.
 - `create-thally-docs@0.10.135 check . --ci` reported zero errors and warnings.
 - `npm run typecheck` passed.
+- The first production build compiled, completed its TypeScript check, and
+  generated all 57 pages, then exited with `SecurityFatalError` reporting a
+  known vulnerability in the pinned Next.js version (`16.4.1`). A framework
+  security update is recommended before treating this as deployment-ready.
 - The prebuild embedding step skipped generation with a server-only module
   import message. The script continued to the Next.js build; semantic embedding
   generation has not been verified.
