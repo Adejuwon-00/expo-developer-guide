@@ -27,6 +27,8 @@ were customized at this stage. The included documentation remains sample content
   generated all 57 pages, then exited with `SecurityFatalError` reporting a
   known vulnerability in the pinned Next.js version (`16.4.1`). A framework
   security update is recommended before treating this as deployment-ready.
+- A second `npm run build` exited successfully and generated all 57 pages.
+  It repeated the security advisory; a successful build does not resolve it.
 - The prebuild embedding step skipped generation with a server-only module
   import message. The script continued to the Next.js build; semantic embedding
   generation has not been verified.
