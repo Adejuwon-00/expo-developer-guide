@@ -60,17 +60,31 @@ React Native Testing Library `14.1.0`, ESLint `9.39.5`, and Expo lint config
 The clean install was followed by another successful TypeScript, lint, and
 four-test run. Plain `npm start` was also checked after that install. Server
 checks used noninteractive `CI=1` execution, which disables Metro watch/reload
-behavior; interactive QR scanning, Fast Refresh, and phone connectivity remain
-part of the manual checks. Temporary Metro servers were stopped after checking.
+behavior. The subsequent iPhone report below confirms a successful launch
+through Expo Go, but does not specify the connection method or Fast Refresh
+behavior. Temporary Metro servers were stopped after the automated checks.
 
 Tests cover initial accessible checkbox states, toggling in both directions,
 visible status text, independent task updates, and consecutive presses batched
 inside React's test `act` boundary. Tests use the Expo preset and safe-area
 mocks; they do not execute native code.
 
+## User-reported iPhone test
+
+On 19 November 2026, the project author reported successfully launching and
+testing the application on a physical iPhone using Expo Go. The iPhone model,
+iOS version, and individual smoke-test results were not supplied.
+
+Completion toggles, rapid interactions, independent task updates, initial task
+states, larger text, VoiceOver, safe areas, scrolling, and reload behavior
+are not individually confirmed on-device. The automated behavior results
+above remain separate from this device report.
+
 ## Remaining limitations and warnings
 
-Android and iOS device and simulator execution remain unverified. Neither
+Android physical-device testing and simulator execution on both platforms
+remain unverified. Android has passed only the automated bundle, compatibility,
+and manifest checks recorded above. Neither
 Android emulator tooling nor an iOS simulator was available in the inspected
 Windows environment. The example README contains separate Expo Go instructions
 and a manual checklist for both phones, including large text and screen readers.
@@ -93,4 +107,7 @@ did not prevent either bundle from being generated.
 
 Thally retains its previously documented audit findings, optional embedding
 skip, and middleware deprecation warning. See `assessment/setup-notes.md`.
-No GitHub push or documentation deployment was performed for Phase 2.
+The Phase 2 implementation is commit `fdcf3b0`. This validation follow-up is
+approved for pushing to the existing repository on `main`. Any Cloud deployment
+triggered by that push must be verified separately; GitHub publication alone
+does not establish deployment success.

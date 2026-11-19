@@ -59,7 +59,15 @@ testing on Android and iOS.
 
 ## Check on both phones
 
-Physical-device checks are still pending. On each platform:
+The project author reported successfully launching and testing the app on a
+physical iPhone through Expo Go on 19 November 2026. The device model, iOS
+version, and individual checklist results were not specified. Initial task
+states, completion toggles, rapid interactions, larger text, VoiceOver, safe
+areas, scrolling, and reload behavior remain individually unverified on-device.
+Android physical-device testing is still pending.
+
+Use this checklist on each platform; it describes expected behavior rather
+than a record of completed device checks:
 
 - Confirm all three tasks and their initial states.
 - Toggle every row twice and confirm it returns to its original state.
@@ -71,9 +79,13 @@ Physical-device checks are still pending. On each platform:
 - With TalkBack on Android or VoiceOver on iPhone, confirm each task is one
   checkbox control with its title and correct checked state. Activate it and
   confirm that the state changes.
+- Press `r` in the terminal for a full reload and confirm the initial task
+  states return.
 
-The Android and iOS bundles were generated on Windows. Neither platform has
-been verified on a device or simulator in this environment.
+The Android and iOS bundles were generated on Windows. Android's automated
+build, compatibility, and manifest checks passed; no Android device test or
+simulator execution on either platform has been confirmed. The iPhone result
+above was reported by the project author, not observed by the coding agent.
 
 ## Find your way around
 
