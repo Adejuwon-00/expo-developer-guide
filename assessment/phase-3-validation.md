@@ -190,3 +190,116 @@ filter interactions and reloads, larger text, safe areas, screen-reader
 announcements, and focus after a task disappears remain unverified. No new
 browser or device results are claimed. Existing audit and embedding notes
 above remain in effect. No push or publishing action is part of this review.
+
+## Progressive learning revision
+
+The entry point is now basic JavaScript familiarity. The introduction explains
+components, JSX, props, state, and the relevant TypeScript annotation using the
+actual task screen. React Native, Expo, and Expo Go have distinct roles before
+the reader is asked to install or change anything. Deeper React references
+are optional rather than prerequisites for running the example.
+
+The quickstart uses numbered install, sign-in, start, open, and interaction
+steps with adjacent expected results. The Android skip appears before the
+iPhone login command. Package findings moved into troubleshooting; the single
+verification note follows the expected screen result. The matching-account
+requirement and distinction between expected behavior and verified results
+remain intact. Both READMEs describe the same JavaScript entry point and
+checkpoint-based learning path.
+
+The filtering guide now builds selection controls first, derived rows second,
+and empty views third. Each stage is runnable and explains both its change
+and what to observe before continuing. The tests are assembled incrementally:
+a complete first test file, an import/helper update and membership test, then
+two empty-state tests. The target counts are five, six, and eight tests while
+retaining the original four. The final feature remains the same; the committed
+starter stays unfiltered.
+
+### Instructional review
+
+These are editorial heuristics, not measured user behavior or usability-study
+results:
+
+| Review question | Change made |
+| --- | --- |
+| Is the goal apparent when scanning? | Each opening names a concrete outcome; action headings describe the sequence. |
+| Is the next action easy to find? | The introduction links the quickstart near the opening; numbered steps and checkpoint subheadings identify what to do next. |
+| Does each section build on earlier knowledge? | JSX/props/state are introduced in context; filter choice precedes derived rows, which precede empty-state handling. |
+| Can progress be verified? | Expected install/server/screen results and per-stage interactions appear beside the commands or edits; test counts increase as tests are added. |
+| Is repetition useful? | Repeated checkpoint commands are deliberate so each stage can be checked independently; audit details and verification caveats are kept outside the main action sequence. |
+| Is unfamiliar knowledge explained? | Commands, SDK compatibility, state setters, union types, list props, predicates, conditional styles, and test queries receive short explanations where used. |
+| Can a reader recover? | Local advice covers missing controls/styles, unchanged lists, wrong defaults, blank empty views, and lost tasks; quickstart troubleshooting retains shell, account, network, SDK, and installation recovery. |
+
+The three-page navigation is unchanged. Two quickstart fragment links were
+corrected to match Thally's heading slug rules. Source checks and production
+HTML checks confirm that the in-page targets exist; this is not a claim of
+visual or keyboard verification.
+
+### Documentation checks
+
+Root TypeScript passed. Thally validation reported zero errors and warnings.
+The production build passed, compiling three authored MDX modules and generating
+47 routes/pages. It retained the optional embedding skip and middleware warning
+already described above. No dependency or framework change was made.
+
+The default production-preview port 3040 was occupied. That server was left
+alone; a separate production preview ran on port 3041. HTTP checks passed for
+all three lessons, the introduction alias, internal links, rendered fragment
+IDs, navigation order, source-file links, search results and their destinations,
+empty search results, sitemap, and agent listings. Both README relative-link
+checks passed. All eight removed sample URLs still return 404, while framework
+API descriptions remain available.
+
+The isolated tutorial uses the existing fresh-clone validation directory from
+the earlier Phase 3 run. Its package manifest and lockfile were compared with
+the maintained starter and match exactly. This revision did not run a new
+installation or audit. The existing audit counts and limitations above remain
+the recorded results.
+
+### Isolated checkpoint results
+
+The temporary verification script extracted the revised guide's code fences
+and applied each stage at its stated insertion points. It asserted that edit
+anchors were unique, retained the original test file, and added temporary
+behavior checks only inside the isolated copy. The test-file stages then
+assembled the exact published first-file, import/helper, membership, and
+empty-state blocks in the documented order.
+
+| Stage | TypeScript and lint | Original tests | Additional result |
+| --- | --- | --- | --- |
+| 1: select a filter | Passed | Four passed | One temporary test passed: selection changes, exactly one option is selected, all three tasks and their statuses remain visible. |
+| 2: derive matching rows | Passed | Four passed | Two temporary tests passed: initial view membership and reversible movement between Active and Completed without losing tasks. |
+| 3: explain empty views | Passed | Four passed | Two temporary tests passed: empty Active/Completed messages, controls retained, updated tasks preserved when returning to All. |
+| 4a: first published test | Passed | Included | Two suites, five tests passed. |
+| 4b: add membership test | Checked again at final stage | Included | Two suites, six tests passed. |
+| 4c: add empty-state tests | Passed | Included | Two suites, eight tests passed; no snapshots. |
+
+This staged run supersedes the earlier nine-unchanged-block comparison for
+the editorial-only revision. The snippets have now been reorganized and split
+for teaching, and were tested again from the isolated baseline. The final
+behavior remains the same. Neither the temporary checkpoint tests nor the
+completed tutorial solution is added to the maintained example.
+
+The review preview command is
+`node node_modules/next/dist/bin/next start -p 3041` from the repository root.
+It serves the newly built documentation at http://localhost:3041 for local
+review. The default-port server was not stopped or replaced.
+
+Manual review remains required for desktop/mobile readability, code overflow,
+keyboard navigation, pagination, and the physical-device sign-in flow. Larger
+text, safe areas, filtering interactions and reloads, screen-reader selected
+states, announcements, and focus after a disappearing row are not established
+by the mocked tests or bundles. No new browser or device results are claimed.
+No push, Cloud deployment, or live-revision verification is part of this change.
+
+The final isolated solution exported successfully for both platforms:
+Android generated a Hermes bundle from 603 modules; iOS generated one from
+605 modules. Metro workers repeated the existing `FORCE_COLOR`/`NO_COLOR`
+warning. The complete staged verification exited successfully. These exports
+establish bundle compatibility, not physical-device execution.
+
+Final whitespace validation passed. The reviewed six-file diff contains only
+the three lesson pages, both READMEs, and this validation record. The starter's
+source, tests, package manifests and lockfiles, navigation, and framework pin
+have no changes. The documentation is committed locally for review; nothing
+was pushed or published.

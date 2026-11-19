@@ -1,73 +1,97 @@
 ---
 title: Expo for React developers
-description: Bring your React knowledge to a small mobile app, then add and test task filtering.
+description: Run a task list on your phone, learn how its React code works, then add and test filtering.
 ---
 
-You already know how to turn state into a React interface. On a phone, that
-part still works. The unfamiliar parts are the components you render, how you
-interact with them, and how you get the app onto a device.
+Build a small mobile app from code you can read and change. You'll run a task
+list on your phone, learn how its screen responds to a press, and add All,
+Active, and Completed filters with behavior tests.
 
-This guide is for React web developers with basic TypeScript knowledge. It
-takes those unfamiliar parts one at a time. You'll run a small task list on
-your phone, read the code behind it, and then add All, Active, and Completed
-filters with tests for their behavior.
+You need basic JavaScript familiarity: functions, objects, and arrays. You
+don't need previous Expo or React Native experience. If React or TypeScript
+is new to you, the lessons explain the parts used here as you encounter them.
+If you already use React, you'll recognize the same components and state.
 
-## What Expo and React Native do
+[Start by running the app on your phone](/quickstart). The rest of this page
+explains what you'll be running; you can return to it after the first launch.
 
-[React Native](https://reactnative.dev/docs/getting-started) lets you use React
-to render native platform views. A `View` is a layout container; `Text`
-displays text; `Pressable` handles presses. These are native components, not
-HTML elements running inside a browser.
+## React describes the screen; React Native puts it on your phone
 
-[Expo](https://docs.expo.dev/versions/v58.0.0/) provides a framework and tools
-for building React Native apps. In this project, its development server
-bundles the TypeScript code and serves it to Expo Go on your phone. You don't
-need Xcode or Android Studio for this first run.
+A React **component** is a function that describes part of an interface. In
+this starter, the `App` component describes the whole screen. React Native
+provides components such as `View` for layout, `Text` for text, and `Pressable`
+for something you can tap. They render native platform views rather than HTML
+inside a browser.
 
-Expo Go works for this example because it includes the native modules we use.
-An app that needs custom native code needs its own development build.
+Here is the title from the starter:
 
-## The React part stays familiar
+```tsx
+<Text accessibilityRole="header" style={styles.heading}>
+  Task starter
+</Text>
+```
 
-The starter keeps its tasks in local state:
+The tag-like syntax is **JSX**, used to describe the interface in JavaScript.
+The attributes are **props**: inputs to a component. Here, `style` supplies
+formatting and `accessibilityRole` identifies the text as a heading. Curly
+braces insert a JavaScript value, such as `styles.heading`, into JSX.
+
+You don't need to write this screen from scratch. The working version is in
+[`examples/expo-task-starter/App.tsx`](https://github.com/Adejuwon-00/expo-developer-guide/blob/main/examples/expo-task-starter/App.tsx).
+
+## Expo gets that code onto a device
+
+Expo provides a framework and tools for building React Native apps. You'll
+start its development server on your computer and open the project in
+**Expo Go**, an app installed on your phone. The server prepares your code;
+Expo Go runs it using the native capabilities already included in that app.
+
+That is enough for this example. You don't need Xcode or Android Studio to
+run it through Expo Go. Apps needing custom native code use a development
+build instead; that workflow is outside this guide.
+
+## State connects a press to a changed screen
+
+The starter has three task objects. Each has an `id`, a `title`, and a
+`completed` value. **State** is data React remembers between renders. A render
+is React calling your component to work out what the interface should show.
+
+The app keeps its task array in state:
 
 ```tsx
 const [tasks, setTasks] = useState<Task[]>(initialTasks);
 ```
 
-Each task has an `id`, a `title`, and a `completed` flag. Pressing a task maps
-over the latest array and replaces that task with an updated object. React
-then renders its new checkbox state and status text. Immutable updates,
-props, and stable keys matter here just as they do on the web.
+`tasks` is the current array. `setTasks` is the function used to update it;
+React then renders the new result. `initialTasks` supplies the starting data.
+The TypeScript annotation `Task[]` means an array of task objects. TypeScript
+checks the shape of those objects while you work; it doesn't save them.
 
-The task type, initial data, screen, toggle handler, and styles all live in
-[`examples/expo-task-starter/App.tsx`](https://github.com/Adejuwon-00/expo-developer-guide/blob/main/examples/expo-task-starter/App.tsx).
-There is no backend or saved storage. A full reload restores the sample tasks;
-Fast Refresh can preserve state while you edit.
+When you press a row, the app creates an updated array instead of changing the
+old objects in place. React uses that new state to show the checkbox and
+status text. There is no backend or saved storage: a full reload restores the
+sample tasks.
 
-## What changes on a phone
+For more React background, see [components](https://react.dev/learn/your-first-component)
+and [state](https://react.dev/learn/state-a-components-memory). You can follow
+the quickstart without reading those references first.
 
-- **Components:** use `View`, `Text`, and `Pressable` rather than `div`, `p`,
-  and `button`. Text belongs inside `Text` components.
-- **Styling:** the starter uses `StyleSheet.create` and style props. Names
-  look familiar, but React Native doesn't use browser CSS or its cascade.
-  Numeric dimensions are logical units, and layout defaults differ from CSS.
-- **Interaction:** rows respond to `onPress`. The whole row is a touch target,
-  with a minimum height and room for text to wrap.
-- **Accessibility:** each row declares a checkbox role, its task title, and
-  its checked state. Visual styling alone doesn't communicate those semantics
-  to VoiceOver or TalkBack.
-- **Screen edges:** `react-native-safe-area-context` keeps content clear of
-  system controls without guessing the size of a notch or home indicator.
+## What to notice on the phone
 
-You'll see these decisions in the working app before changing anything.
+- **A whole row responds to a press.** React Native uses `onPress` for this
+  interaction. You don't have to aim for the small checkbox.
+- **Text and rows can grow.** Styles are JavaScript objects passed through
+  props, rather than browser CSS. The starter leaves room for wrapping and
+  larger system text.
+- **The interface exposes more than color.** Task rows have checkbox labels
+  and checked states for screen readers, plus visible status text.
+- **System controls take space.** The starter uses safe-area insets to keep
+  content clear of a notch, status bar, or home indicator. You'll still need
+  to check layout and accessibility on your own device.
 
-## Start with a working screen
+## Run it, then make one useful change
 
-You'll need basic React and TypeScript knowledge, Git, Node.js with npm, and
-an iPhone or Android phone with compatible Expo Go. The [quickstart](/quickstart)
-covers the versions and commands.
-
-First, [run the starter on your phone](/quickstart). Then
-[build and test task filtering](/guides/task-filtering). The starter has
-completion toggles but no filters, so the guide begins with code you can run.
+First, [follow the quickstart](/quickstart) to see the three tasks and try the
+completion controls. Then [build and test task filtering](/guides/task-filtering).
+The committed starter has no filters; that is the change the practical guide
+will walk you through.

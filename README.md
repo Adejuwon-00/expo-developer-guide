@@ -1,7 +1,9 @@
 # Expo for React Developers
 
-A practical learning resource for React developers building their first mobile
-app with Expo and React Native. The documentation uses Thally.
+A practical learning resource for JavaScript developers exploring mobile apps
+with Expo and React Native. React experience helps, but the lessons introduce
+components, state, and TypeScript syntax where they are used. The documentation
+uses Thally.
 
 Read the lessons in this revision:
 
@@ -43,8 +45,9 @@ npm run dev
 ```
 
 Open http://localhost:3040. Review the introduction, follow the quickstart,
-then read the filtering guide. The app stays unfiltered until you apply the
-guide locally. The [validation record](assessment/phase-3-validation.md)
+then follow the filtering guide checkpoint by checkpoint: selection, matching
+rows, empty states, and behavior tests. Each stage has an expected result.
+The app stays unfiltered until you apply the guide locally. The [validation record](assessment/phase-3-validation.md)
 separates completed checks from the remaining visual and device review.
 
 If PowerShell blocks `npm.ps1`, use `npm.cmd` in

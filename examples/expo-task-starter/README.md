@@ -1,8 +1,10 @@
 # Expo task starter
 
-A small task list for learning how React state and components work on a phone.
+A small task list for JavaScript developers learning how React components and
+state work on a phone. No prior Expo or React Native knowledge is assumed.
 You can mark three sample tasks complete or incomplete. Filtering is left for
-the practical guide.
+the practical guide, which adds selection, matching rows, and empty states
+in separate runnable steps before testing the feature.
 
 The app uses Expo SDK 58, React Native, and TypeScript. It has no backend or
 saved storage. A full reload resets the tasks; returning from the background
