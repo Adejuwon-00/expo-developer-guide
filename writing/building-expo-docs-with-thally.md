@@ -4,7 +4,7 @@ Getting an app running is one thing. Understanding enough of it to change someth
 
 That's what I wanted to focus on when I started building this guide. I've worked with Expo before, and a small task-list app gave me something practical to teach: run the app, understand how its state works, then add and test a feature.
 
-I used Thally to turn that learning experience into a documentation site. You can explore the [published guide](https://expo-developer-guide.thally.app/) or look through the [source repository](https://github.com/Adejuwon-00/expo-developer-guide).
+I used [Thally](https://thally.io/) to turn that learning experience into a documentation site. You can explore the [published guide](https://expo-developer-guide.thally.app/) or look through the [source repository](https://github.com/Adejuwon-00/expo-developer-guide).
 
 Here's how I approached the setup, content, and publishing process.
 
