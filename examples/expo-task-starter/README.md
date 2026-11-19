@@ -115,5 +115,4 @@ Learning path: [Introduction](https://expo-developer-guide.thally.app/introducti
 [Quickstart](https://expo-developer-guide.thally.app/quickstart), and
 [Task filtering](https://expo-developer-guide.thally.app/guides/task-filtering).
 The filtering lesson extends this starter locally; the committed app remains
-unfiltered. These Phase 3 lessons are available in the repository's
-`src/content/` for local review; their new content hasn't been deployed yet.
+unfiltered.
