@@ -1,89 +1,145 @@
 # From Code to Docs: Building an Expo Developer Guide with Thally
 
-I use Expo regularly, so it gave me a familiar subject for trying Thally. A small task list offered a useful teaching problem: help someone get an app running, understand its state, then change its behavior.
+Getting an app running is one thing. Understanding enough of it to change something is another.
 
-The result is [Expo for React Developers](https://expo-developer-guide.thally.app/), with the [documentation and example application on GitHub](https://github.com/Adejuwon-00/expo-developer-guide). Readers need basic JavaScript familiarity. React experience helps, but the lessons introduce components, state, and TypeScript where they become useful.
+That's what I wanted to focus on when I started building this guide. I've worked with Expo before, and a small task-list app gave me something practical to teach: run the app, understand how its state works, then add and test a feature.
 
-## Start with a repository you can work in
+I used Thally to turn that learning experience into a documentation site. You can explore the [published guide](https://expo-developer-guide.thally.app/) or look through the [source repository](https://github.com/Adejuwon-00/expo-developer-guide).
 
-For managed hosting, you need Thally Cloud and GitHub accounts, with permission to approve the Thally GitHub App. Local authoring also needs Git, Node.js, and npm. My checked environment was Node.js 22.16.0 and npm 10.9.2.
+Here's how I approached the setup, content, and publishing process.
 
-[Thally’s current quickstart](https://docs.thally.io/quickstart) recommends creating a site in Cloud and letting it create the documentation repository. My project took the existing-repository path: I already had an empty GitHub repository and prepared the Thally project locally before connecting it.
+## Getting started with Thally
 
-The initializer, `create-thally-docs@0.10.135`, refused to scaffold into the checkout because it contained `.git`. I generated the starter in a separate directory, then copied its files into the checkout, excluding the starter’s generated Git directory. That preserved the existing remote. It was a workaround for this setup, not a reason to replace an existing repository’s history.
+You'll need Git, Node.js, and npm to work locally, plus GitHub and Thally Cloud accounts for managed publishing. I used Node.js 22.16.0 and npm 10.9.2.
 
-To explore the finished documentation locally:
+There are two ways to approach the setup.
 
-```sh
+The simplest is to follow [Thally's quickstart](https://docs.thally.io/quickstart): create a site in Cloud and let Thally generate the repository.
+
+I already had an empty GitHub repository, so I took the existing-repository route instead.
+
+To explore the finished project locally:
+
+```bash
 git clone https://github.com/Adejuwon-00/expo-developer-guide.git
 cd expo-developer-guide
 npm ci
 npm run dev
 ```
 
-Open `http://localhost:3040`. These root commands run Thally; the Expo example under `examples/expo-task-starter/` has separate dependencies and commands. In PowerShell, use `npm.cmd` if execution policy blocks `npm.ps1`.
+Open `http://localhost:3040` to view the documentation.
 
-## Give each page a job
+The Expo application lives separately in `examples/expo-task-starter/`, with its own dependencies and commands.
 
-Thally pages live under `src/content/`. MDX combines Markdown with supported components, although ordinary headings, links, and code fences were enough for most of this guide. Each page begins with frontmatter:
+## Creating the documentation pages
 
-```yaml
+Thally stores documentation pages as MDX files inside `src/content/`. Each page starts with frontmatter followed by the content.
+
+For example, a simple page at `src/content/introduction.mdx` might look like this:
+
+```mdx
 ---
 title: Introduction
-description: An overview of the tools and lessons used to build the Expo task-list app.
+description: Learn what this guide covers and where to begin.
 ---
+
+Start by running the app on your phone.
+
+[Open the quickstart](/quickstart)
 ```
 
-I organized the material into three lessons. The introduction sets out the outcome and audience, then introduces React Native, Expo, and state. The quickstart gets the starter onto a phone through Expo Go. The practical guide adds All, Active, and Completed filters, then tests them.
+That's enough to create a page with a title, description, and a link to another lesson. Thally renders the title from frontmatter, so the body doesn't need another H1. The example is illustrative; the published introduction contains more context.
 
-The committed starter deliberately has no filters. Readers first make the controls respond, then show matching tasks, then handle empty results. Each checkpoint explains the change and gives an observable result before the next edit.
+I organized my site into three lessons:
 
-## Make navigation match the learning path
+- **Introduction:** What you'll build and the React Native, Expo, and state concepts you'll need.
+- **Quickstart:** How to install the starter and run it on a phone using Expo Go.
+- **Task filtering:** How to add All, Active, and Completed filters, then test the behavior.
 
-Content files alone don’t communicate reading order. This excerpt from `docs.json` defines it:
+The starter deliberately doesn't include filtering. Readers add the feature themselves.
+
+At first, the filtering tutorial asked readers to make several changes before they could see a result. I found that harder to follow than necessary, so I reorganized it into smaller checkpoints.
+
+First, make the filter controls respond. Then connect them to the task list. After that, handle empty results and add automated tests.
+
+Each step gives the reader something specific to check before moving on.
+
+## Making navigation easier to follow
+
+The content files define the lessons, but `docs.json` determines how readers move between them.
+
+Here's the navigation configuration I used:
 
 ```json
 {
   "breadcrumbs": false,
-  "navigation": { "display": "dropdown" },
-  "tabs": [{
-    "tab": "Guide",
-    "displayLabel": "GUIDE",
-    "pages": ["introduction", "quickstart", "guides/task-filtering"]
-  }]
+  "navigation": {
+    "display": "dropdown"
+  },
+  "tabs": [
+    {
+      "tab": "Guide",
+      "displayLabel": "GUIDE",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "guides/task-filtering"
+      ]
+    }
+  ]
 }
 ```
 
-Page entries are paths relative to `src/content/`, without `.mdx`. With one collection, this configuration gives the installed runtime a static GUIDE sidebar heading and removes the extra tab row. Page-level `navTitle` values keep Quickstart and Task filtering short while preserving descriptive page headings.
+The page paths are relative to `src/content/`, without the `.mdx` extension.
 
-I also removed unrelated sample pages. Hiding them from navigation would still leave their URLs reachable.
+I also made a small UX change here. The project name originally appeared in several places: the site branding, navigation group, breadcrumbs, and introduction heading.
 
-## Test the instructions readers receive
+Each label made sense individually, but together they felt repetitive. I simplified the navigation so readers could focus on the three lessons instead of seeing the project name repeated throughout the interface.
 
-From the repository root, I ran:
+I removed the unused starter pages as well. Hiding a page from navigation doesn't necessarily make its URL unavailable.
 
-```sh
+## Testing the documentation
+
+Before publishing, I ran the documentation checks from the repository root:
+
+```bash
 npm run typecheck
 npm run check -- --ci
 npm run build
 ```
 
-TypeScript passed, Thally reported zero errors and warnings, and the production build succeeded. These checks validate the documentation project; they don’t prove the tutorial’s app behavior.
+Those checks passed, but they only validate the documentation project. They don't prove the code inside a tutorial works.
 
-For that, I applied the guide’s snippets in order to an isolated starter copy. Each implementation checkpoint passed TypeScript, lint, and the original four tests. The published test additions brought the total to eight. Android and iOS bundles also generated successfully, while the maintained starter stayed unchanged.
+So I tested the tutorial separately.
 
-I launched the starter on a physical iPhone through Expo Go. Individual accessibility behaviors and tutorial filtering remain unverified on-device; Android device testing is also pending. Mocked tests and bundles don’t establish native behavior.
+I applied the filtering instructions to an isolated copy of the original Expo starter, following the same sequence a reader would use. Each implementation checkpoint passed TypeScript, lint, and the existing tests. Once the new filtering tests were added, the complete suite reached eight passing tests.
 
-The validation notes retain unresolved dependency findings. Optional embedding generation also skips; full-text search was checked independently. A passing build isn’t a clean security audit or proof of semantic search.
+I also generated Android and iOS bundles and ran the original starter on a physical iPhone using Expo Go.
 
-## Publish, then check what arrived
+The completed filtering feature and accessibility behaviors weren't individually verified on a physical device, so I kept that distinction clear in the project's validation records. Android device testing also remains unverified.
 
-In [Thally Cloud](https://app.thally.io/), select **Create a site**, enter its name and address, then choose **Use an existing repository** only after it contains a compatible Thally project. Approve repository access, select the repository with `main` as its production branch, and review the settings before publishing. Optional Product sources and Knowledge surfaces can wait.
+For me, testing documentation isn't just about making sure the site builds. It's also about checking whether the instructions produce the result they promise.
 
-Once connected, a reviewed `git push origin main` triggers managed publishing. The latest published revision is `0dfaef5`, matching the Cloud revision I confirmed in the dashboard. Public checks confirmed the lessons, navigation, links, discovery listings, and full-text search, including an unmatched query returning zero results.
+## Publishing with Thally Cloud
 
-Earlier provisioning failed. My recollection is that recreating the failed Cloud site resolved it, with no failures since. The available records don’t establish the original error, investigation details, or root cause, so I can’t recommend recreation as a general fix. If yours fails, preserve the message and inspect deployment status before retrying.
+Once the repository contained the Thally project, I connected it through [Thally Cloud](https://app.thally.io/).
 
-## Make progress visible
+I selected **Use an existing repository**, approved GitHub access, chose the repository and `main` as the production branch, then published the site.
 
-The most useful lesson was to make progress visible. A selected filter, a changed list, and a passing test each tell readers whether they can continue. Checking those transitions made the documentation more dependable than reviewing the prose alone.
+After that, pushing changes to `main` triggered new deployments. I checked the live pages, navigation, links, and search to make sure the published site reflected the changes.
+
+The initial setup wasn't completely smooth. My recollection is that recreating a failed Cloud site resolved a provisioning problem.
+
+The original error, investigation details, and root cause aren't available, so I wouldn't treat recreating a site as a general troubleshooting fix. If you encounter a similar issue, keep the error details and inspect the deployment status before retrying.
+
+## What I learned
+
+One thing this project reinforced for me is that good documentation should help developers know when they're on the right track.
+
+In the filtering guide, every stage has something they can verify: a button changes when selected, the task list updates, or a test passes.
+
+That feedback makes it easier to spot problems early and continue with confidence. It's also why I tested the instructions step by step instead of relying on the writing alone.
+
+The result is a small guide, but one where the explanations, code, and expected outcomes work together.
+
+You can explore the [documentation](https://expo-developer-guide.thally.app/) and the [GitHub repository](https://github.com/Adejuwon-00/expo-developer-guide) to see the finished project.
