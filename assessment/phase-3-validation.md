@@ -392,3 +392,52 @@ interaction still require visual review. No new browser, accessibility, or
 physical-device result is claimed. Existing audit findings and embedding/device
 limitations remain documented above. This update is committed locally only;
 no push, Cloud deployment, or deployment-setting change was performed.
+
+## Sidebar hierarchy refinement
+
+The requested hierarchy is the product wordmark, a GUIDE section heading, and
+Introduction, Quickstart, and Task filtering beneath it. Two supported
+configuration fields implement it: `navigation.display: "dropdown"` selects
+Thally's collection-switcher presentation, and the existing tab's
+`displayLabel: "GUIDE"` supplies the uppercase heading. The internal tab name,
+page IDs, order, URLs, compact labels, and breadcrumb setting are unchanged.
+
+Despite the mode's name, a single collection does not create a desktop
+dropdown: the installed sidebar renders a static title, while the header
+omits its separate collection-tab row. On mobile, the single-collection
+switcher returns no control and the root section supplies the GUIDE heading.
+That is the configured layout behavior; it is not a new visual-test result.
+
+The current page retains Thally's native accent background/text and
+`aria-current="page"` treatment. The runtime uses normal font weight for
+navigation links, so the requested bold example is represented by that
+built-in active-page highlight rather than a permanently bold Introduction
+label. No custom CSS or generated runtime change was introduced.
+
+Only documentation configuration and this validation record changed. Lesson
+content, all code blocks, application source, dependencies, and deployment
+settings remain untouched.
+
+Validation passed for this refinement: root TypeScript, Thally content check
+(zero errors and warnings), production build (three authored MDX modules and
+47 generated routes/pages), and whitespace checks. The embedding skip and
+middleware deprecation remain unchanged.
+
+The owned production preview was restarted on the same port, 3042. Production
+HTML checks confirm exactly one static GUIDE heading in the desktop sidebar,
+no separate collection-tab row, three correctly ordered page links, and one
+correct `aria-current="page"` link on `/`, `/introduction`, `/quickstart`, and
+`/guides/task-filtering`. The wordmark and descriptive content headings remain;
+breadcrumbs and the group eyebrow remain absent. Pagination links, search,
+unmatched search, discovery, and removed sample URLs passed again.
+
+The non-default-port preview reports that its default canonical origin is
+still localhost:3040. Local route checks target port 3042 directly; no claim
+is made that preview canonical URLs were changed. No environment file or
+Cloud deployment setting was modified to suppress this local preview warning.
+
+Desktop/mobile visual appearance, keyboard behavior, wrapping, and the mobile
+drawer still need visual review. The checks above inspect server output and
+navigation semantics; they aren't browser or accessibility testing. Existing
+physical-device and audit limitations remain unchanged. The change is
+committed locally only, with no push or publishing action.

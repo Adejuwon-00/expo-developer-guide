@@ -8,8 +8,10 @@
   },
   "navbar": { "primary": { "label": "Get started", "href": "/quickstart" } },
   "breadcrumbs": false,
+  "navigation": { "display": "dropdown" },
   "tabs": [{
     "tab": "Guide",
+    "displayLabel": "GUIDE",
     "pages": ["introduction", "quickstart", "guides/task-filtering"]
   }],
   "ai": { "chat": true }
