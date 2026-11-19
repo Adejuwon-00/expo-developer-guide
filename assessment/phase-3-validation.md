@@ -441,3 +441,74 @@ drawer still need visual review. The checks above inspect server output and
 navigation semantics; they aren't browser or accessibility testing. Existing
 physical-device and audit limitations remain unchanged. The change is
 committed locally only, with no push or publishing action.
+
+## Four-step quickstart refinement
+
+The quickstart now follows Install, Start, Open, and Verify. It retains its
+title, navigation label, description, and route. Conditional iPhone login is
+inside Start, before Metro occupies the terminal; both platforms then run
+`npm start`. The wrong-directory recovery now explains that the root start
+script runs Thally while the example starts Expo. PowerShell alternatives
+cover both npm and npx. Expected task interactions and full reloads remain
+reader checks, not new device-test results.
+
+Using the same whitespace-based count, the body changed from 1,088 to 810
+words; totals including frontmatter changed from 1,119 to 841. Four numbered
+steps and four language-tagged code blocks were checked with the installed
+Markdown parser. The task labels and initial states match `App.tsx`; the
+example lockfile resolves Expo 58.0.26. The existing example README preserves
+the device-testing record and checklist, linked from Verify.
+
+Official references checked for this revision:
+
+- [Device workflow](https://docs.expo.dev/get-started/start-developing/)
+- [Physical-iPhone account errors](https://docs.expo.dev/troubleshooting/expo-go-sign-in-required/)
+- [Expo Go compatibility](https://expo.dev/go)
+
+The current official workflow requires matching accounts in Expo CLI and
+Expo Go on a physical iPhone. The account-error reference also says to
+restart the development server after switching accounts because it caches
+the resolved account. Recovery stops Metro before entering login in the
+same terminal, then restarts it. No authentication was performed here.
+
+| Command or check | Actual result |
+| --- | --- |
+| Root `npm.cmd run typecheck` | Passed |
+| Root `npm.cmd run lint` | Exit 0; zero errors, 11 existing warnings |
+| Root `npm.cmd run check -- --ci` | Zero errors and warnings |
+| Root `npm.cmd run build` | Passed; three authored MDX modules, 47 generated routes/pages |
+| Example `npx.cmd --no-install expo login --help` | Passed; installed CLI confirms login command |
+| Example `npx.cmd --no-install expo start --help` | Passed; installed CLI confirms start command |
+| Installed CLI reload handling | `startInterface.js` handles reload and calls `reloadApp`; no device reload was performed |
+| External links | All seven distinct destinations returned HTTP 200; linked README checklist heading exists |
+| Root `npm.cmd start -- --port 3045` | Production preview started successfully |
+| Preview quickstart | HTTP 200, one H1, exactly four numbered steps, both device paths and expected task text present |
+| Preview links and navigation | Troubleshooting anchor and filtering destination resolve; GUIDE order, current-page markers, titles and previous/next links passed on all lessons |
+| `git diff --check` | Passed |
+
+Root ESLint reports eight unused `no-console` disable directives in
+`scripts/agent-readiness.ts`, two in `scripts/build-embeddings.ts`, and one
+existing missing-effect-dependency warning in
+`src/components/admin/admin-settings-controls.tsx`. Those files are unchanged.
+ESLint's current configuration does not lint MDX; Thally validation and the
+production compiler checked the page. No lint fixes or runtime edits were made.
+
+The production build retained the optional embedding skip and middleware
+deprecation. Existing root and example audit findings remain unchanged; no
+dependency installation, audit fix, or new audit was performed in this
+revision. The prior clean-install and app-test records remain historical
+evidence, not rerun results for this content-only change.
+
+The browser connection timed out before a usable session was established.
+Desktop/mobile readability, code overflow, keyboard interaction, and native
+device behavior remain manual checks. Full reload resetting the tasks is
+supported by the starter's initial state and absence of persistence, and
+the installed CLI supports `r`; this revision does not establish on-device
+reload behavior. The earlier reported iPhone launch/test remains separate
+from automated checks. Android device tests, sign-in details, accessibility,
+and tutorial filtering on devices remain unverified.
+
+Only the quickstart and this record are included in the local commit. The
+introduction, filtering guide, example application, dependencies, navigation
+configuration, and uncommitted article are unchanged. No push, deployment,
+or external publication is part of this revision.
