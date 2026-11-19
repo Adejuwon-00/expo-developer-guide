@@ -1,63 +1,80 @@
 # Expo for React Developers
 
-A practical learning resource for JavaScript developers exploring mobile apps
-with Expo and React Native. React experience helps, but the lessons introduce
-components, state, and TypeScript syntax where they are used. The documentation
-uses Thally.
+Learn how to build, run, and test mobile apps with Expo and React Native, one practical step at a time.
 
-Read the lessons in this revision:
+This project takes you from running a simple task-list app on your phone to building and testing your first feature. You'll work with components, state, and user interactions using a real example rather than disconnected snippets.
 
-- [Introduction](src/content/introduction.mdx)
-- [Quickstart](src/content/quickstart.mdx)
-- [Task filtering](src/content/guides/task-filtering.mdx)
+You'll need basic JavaScript knowledge. React experience helps, but you don't need prior Expo or React Native experience.
 
-Existing site: https://expo-developer-guide.thally.app. The Phase 3 lessons
-are committed locally for review and haven't been pushed or verified on Cloud.
+## Read the documentation
 
-The [Expo task starter](examples/expo-task-starter/README.md) is an independent
-application with its own dependencies and lockfile. It has completion toggles
-but no filters: the practical guide teaches you to add them locally.
+**[Explore the documentation](https://expo-developer-guide.thally.app/)**
 
-## Run the example
+The guide follows three lessons:
 
-From the repository root:
+1. **[Introduction](https://expo-developer-guide.thally.app/introduction)** — Understand Expo, React Native, and what you'll build.
+2. **[Quickstart](https://expo-developer-guide.thally.app/quickstart)** — Run the task-list app on your phone using Expo Go.
+3. **[Task filtering](https://expo-developer-guide.thally.app/guides/task-filtering)** — Add All, Active, and Completed filters, then test the behavior.
+
+Each lesson builds on the previous one, with practical steps and checkpoints to help you verify your progress.
+
+The documentation is built and published with [Thally](https://docs.thally.io/quickstart).
+
+## Run the Expo example
+
+The repository includes a standalone Expo application in `examples/expo-task-starter/`.
+
+**Requirements:** Git, Node.js, npm, and a phone with Expo Go supporting SDK 58. Connect your computer and phone to the same Wi-Fi network. The example was checked with Node.js 22.16.0 and npm 10.9.2.
+
+From your terminal:
 
 ```sh
-cd examples/expo-task-starter
+git clone https://github.com/Adejuwon-00/expo-developer-guide.git
+cd expo-developer-guide/examples/expo-task-starter
 npm ci
+```
+
+**Using a physical iPhone?** Run `npx expo login` from this directory, then sign into Expo Go with the same Expo account. Android users can skip this sign-in step.
+
+Start the app's development server:
+
+```sh
 npm start
 ```
 
-Follow the example README for Expo Go setup and checks, including the matching
-Expo account requirement for physical iPhone use. Installing dependencies
-at the repository root doesn't install the example's dependencies.
+Keep the terminal open and scan its QR code, following the iPhone or Android instructions in the [example README](examples/expo-task-starter/README.md).
+
+You should see **Task starter** with three tasks that you can mark complete or incomplete. **The starter deliberately doesn't include filtering yet.** You'll add that feature in the practical guide.
+
+The Expo application has its own dependencies and lockfile, separate from the documentation site.
 
 ## Work on the documentation
 
-Use Node.js 22.16.0 with npm 10.9.2 to match the checked environment. The root
-package's `engines` field lists other accepted Node.js versions.
+You can also preview the documentation locally to explore the source or contribute changes. Use the checked Node.js/npm environment above.
 
-From the repository root:
+In a separate terminal at the repository root:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open http://localhost:3040. Review the introduction, follow the quickstart,
-then follow the filtering guide checkpoint by checkpoint: selection, matching
-rows, empty states, and behavior tests. Each stage has an expected result.
-The app stays unfiltered until you apply the guide locally. The [validation record](assessment/phase-3-validation.md)
-separates completed checks from the remaining visual and device review.
+Open [http://localhost:3040](http://localhost:3040).
 
-If PowerShell blocks `npm.ps1`, use `npm.cmd` in
-place of `npm`; you don't need to change the system execution policy.
+The main files you'll work with are:
 
-Pages live in `src/content/`, navigation in `docs.json`, and site identity in
-`src/data/site.ts`. These authored files are the source for the local preview
-and the next deployment.
+| File or directory | Purpose |
+| --- | --- |
+| `src/content/` | MDX documentation pages |
+| `docs.json` | Navigation and documentation configuration |
+| `src/data/site.ts` | Site identity and metadata |
+| `examples/expo-task-starter/` | Standalone Expo example |
 
-Before committing documentation changes:
+Run documentation commands from the repository root and Expo commands from the example directory.
+
+### Validate your changes
+
+Before committing documentation updates, run these from the repository root in another terminal:
 
 ```sh
 npm run typecheck
@@ -65,27 +82,17 @@ npm run check -- --ci
 npm run build
 ```
 
-The content check invokes the official Thally CLI and may need registry
-access. The production preview is `npm start`, on port 3040. These root
-commands run the documentation site; the example's `npm start` runs Expo.
+These check TypeScript, Thally content, and the production build. Application tests run separately from the Expo example directory.
 
-## Keep the framework boundary clear
+On Windows, if PowerShell blocks `npm.ps1`, use `npm.cmd` instead of `npm`, and `npx.cmd` instead of `npx`.
 
-The generated Thally runtime and `starter-release.json` describe a pinned
-framework snapshot. Don't edit runtime files to change documentation. Use
-`npm run starter:update` to review a framework update plan before applying it.
-See [AGENTS.md](AGENTS.md) for repository ownership and authoring rules.
+For repository maintenance and framework-update conventions, see [AGENTS.md](AGENTS.md).
 
-Cloud publishes from the connected GitHub repository. A successful push alone
-doesn't verify a live deployment; check its revision and published pages.
-Keep credentials outside source control.
+## Project notes
 
-## Validation records
+Setup decisions, implementation checks, and remaining validation limitations are documented in the [assessment directory](assessment/).
 
-[Setup notes](assessment/setup-notes.md) retain the documentation dependency
-audit and optional embedding limitation. [Phase 2 validation](assessment/phase-2-validation.md)
-separates automated app checks from the reported iPhone test. [Phase 3 validation](assessment/phase-3-validation.md) covers the documentation
-and isolated tutorial checks.
+These records distinguish automated checks from manual device testing and other verification that hasn't been completed.
 
 ## License
 
