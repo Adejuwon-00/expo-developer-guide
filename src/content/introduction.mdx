@@ -1,97 +1,46 @@
 ---
 title: Introduction
-description: Run a task list on your phone, learn how its React code works, then add and test filtering.
+description: An overview of the tools and lessons used to build the Expo task-list app.
 ---
 
-Build a small mobile app from code you can read and change. You'll run a task
-list on your phone, learn how its screen responds to a press, and add All,
-Active, and Completed filters with behavior tests.
+Build a small task-list app with Expo, understand how it works, and add a feature of your own.
 
-You need basic JavaScript familiarity: functions, objects, and arrays. You
-don't need previous Expo or React Native experience. If React or TypeScript
-is new to you, the lessons explain the parts used here as you encounter them.
-If you already use React, you'll recognize the same components and state.
+You'll start with a working React Native app, run it on your phone, and gradually add All, Active, and Completed task filters. Along the way, you'll see how components, state, and user interactions fit together.
 
-[Start by running the app on your phone](/quickstart). The rest of this page
-explains what you'll be running; you can return to it after the first launch.
+**Who this is for:** Developers familiar with basic JavaScript. React experience helps, but you don't need to know Expo or React Native.
 
-## React describes the screen; React Native puts it on your phone
+## What you'll do
 
-A React **component** is a function that describes part of an interface. In
-this starter, the `App` component describes the whole screen. React Native
-provides components such as `View` for layout, `Text` for text, and `Pressable`
-for something you can tap. They render native platform views rather than HTML
-inside a browser.
+1. **Run the app.** Open a working task list on your phone using Expo Go.
+2. **Understand the code.** Explore how the screen is built and how tapping a task updates its state.
+3. **Build and test filtering.** Add All, Active, and Completed views, then verify each behavior.
 
-Here is the title from the starter:
+Each lesson builds on the previous one, with small changes and clear checkpoints so you can tell whether things are working before moving on.
 
-```tsx
-<Text accessibilityRole="header" style={styles.heading}>
-  Task starter
-</Text>
-```
+## The basics, before you start
 
-The tag-like syntax is **JSX**, used to describe the interface in JavaScript.
-The attributes are **props**: inputs to a component. Here, `style` supplies
-formatting and `accessibilityRole` identifies the text as a heading. Curly
-braces insert a JavaScript value, such as `styles.heading`, into JSX.
+You only need three ideas to get started.
 
-You don't need to write this screen from scratch. The working version is in
-[`examples/expo-task-starter/App.tsx`](https://github.com/Adejuwon-00/expo-developer-guide/blob/main/examples/expo-task-starter/App.tsx).
+### React Native builds the interface
 
-## Expo gets that code onto a device
+React Native uses components such as `View`, `Text`, and `Pressable` to create interfaces that render using native platform components rather than HTML elements.
 
-Expo provides a framework and tools for building React Native apps. You'll
-start its development server on your computer and open the project in
-**Expo Go**, an app installed on your phone. The server prepares your code;
-Expo Go runs it using the native capabilities already included in that app.
+If you've worked with React, the component structure and state management will feel familiar. If you haven't, the examples introduce those concepts as you need them.
 
-That is enough for this example. You don't need Xcode or Android Studio to
-run it through Expo Go. Apps needing custom native code use a development
-build instead; that workflow is outside this guide.
+### Expo gets the app running
 
-## State connects a press to a changed screen
+Expo provides the tools to develop and run React Native apps. For this guide, you'll use Expo Go to open the starter on your phone without setting up Xcode or Android Studio.
 
-The starter has three task objects. Each has an `id`, a `title`, and a
-`completed` value. **State** is data React remembers between renders. A render
-is React calling your component to work out what the interface should show.
+### State makes the screen interactive
 
-The app keeps its task array in state:
+The starter contains three tasks, each with a completion state. Tapping a task updates its completion state, and React renders the new result.
 
-```tsx
-const [tasks, setTasks] = useState<Task[]>(initialTasks);
-```
+You'll build on that same data to show all tasks, only active tasks, or only completed tasks.
 
-`tasks` is the current array. `setTasks` is the function used to update it;
-React then renders the new result. `initialTasks` supplies the starting data.
-The TypeScript annotation `Task[]` means an array of task objects. TypeScript
-checks the shape of those objects while you work; it doesn't save them.
+## Start with a working app
 
-When you press a row, the app creates an updated array instead of changing the
-old objects in place. React uses that new state to show the checkbox and
-status text. There is no backend or saved storage: a full reload restores the
-sample tasks.
+You don't need to memorize these concepts before continuing. You'll see them in the code and use them as you work through the lessons.
 
-For more React background, see [components](https://react.dev/learn/your-first-component)
-and [state](https://react.dev/learn/state-a-components-memory). You can follow
-the quickstart without reading those references first.
+**[Next: Run the app on your phone](/quickstart)**
 
-## What to notice on the phone
-
-- **A whole row responds to a press.** React Native uses `onPress` for this
-  interaction. You don't have to aim for the small checkbox.
-- **Text and rows can grow.** Styles are JavaScript objects passed through
-  props, rather than browser CSS. The starter leaves room for wrapping and
-  larger system text.
-- **The interface exposes more than color.** Task rows have checkbox labels
-  and checked states for screen readers, plus visible status text.
-- **System controls take space.** The starter uses safe-area insets to keep
-  content clear of a notch, status bar, or home indicator. You'll still need
-  to check layout and accessibility on your own device.
-
-## Run it, then make one useful change
-
-First, [follow the quickstart](/quickstart) to see the three tasks and try the
-completion controls. Then [build and test task filtering](/guides/task-filtering).
-The committed starter has no filters; that is the change the practical guide
-will walk you through.
+Once it's running, you'll be ready to [build and test task filtering](/guides/task-filtering).
