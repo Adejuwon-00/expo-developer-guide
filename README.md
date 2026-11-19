@@ -8,8 +8,8 @@ uses Thally.
 Read the lessons in this revision:
 
 - [Introduction](src/content/introduction.mdx)
-- [Run the app on your phone](src/content/quickstart.mdx)
-- [Build and test task filtering](src/content/guides/task-filtering.mdx)
+- [Quickstart](src/content/quickstart.mdx)
+- [Task filtering](src/content/guides/task-filtering.mdx)
 
 Existing site: https://expo-developer-guide.thally.app. The Phase 3 lessons
 are committed locally for review and haven't been pushed or verified on Cloud.

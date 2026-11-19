@@ -303,3 +303,92 @@ the three lesson pages, both READMEs, and this validation record. The starter's
 source, tests, package manifests and lockfiles, navigation, and framework pin
 have no changes. The documentation is committed locally for review; nothing
 was pushed or published.
+
+## Document identity and navigation labels
+
+The original screenshot wasn't available for direct comparison. Inspection
+traced the current repeated name to separate authored settings and rendering
+paths: `src/data/site.ts` supplies the wordmark; the `docs.json` group name
+supplies the sidebar group and the label above the content heading; the
+introduction's frontmatter supplied another product-name heading. Breadcrumbs
+combined the tab, group, and navigation page label again.
+
+| Surface | Before | After |
+| --- | --- | --- |
+| Site identity | Expo for React Developers | Unchanged |
+| Collection/tab | Learn Expo | Guide |
+| Authored sidebar group | Expo for React developers | Removed; pages are listed directly on the tab |
+| Group label above the page heading | Expo for React developers | Absent for these ungrouped pages |
+| Breadcrumb display | Tab, group, page | Disabled with `breadcrumbs: false` |
+| Introduction heading and navigation label | Expo for React developers | Introduction |
+| Quickstart navigation and pagination label | Run the app on your phone | Quickstart via `navTitle` |
+| Filtering navigation and pagination label | Build and test task filtering | Task filtering via `navTitle` |
+| Quickstart and filtering content headings | Descriptive task headings | Unchanged |
+
+Both README learning-path links use Introduction, Quickstart, and Task filtering.
+All page routes and their order are unchanged. Configuration changes are
+limited to the tab/pages structure and breadcrumb flag; other settings and
+site identity remain intact. No runtime or custom CSS change was made.
+
+The installed runtime supports top-level tab `pages`, `navTitle` frontmatter,
+and the `breadcrumbs` flag. This was traced through the navigation loader,
+page header/layout, and breadcrumb components, then checked with the official
+CLI. Earlier attempts to retrieve online navigation documentation were
+unsuccessful; no unsupported setting or layout workaround was introduced.
+
+The skimmability review checked the current heading sequence and next actions:
+the introduction establishes the model and points to the first run; the
+quickstart has numbered actions and adjacent expected results; the guide
+preserves selection, matching-row, empty-state, and incremental-test
+checkpoints. No substantive comprehension issue justified another body edit.
+All three lesson bodies were compared with commit `b226941` and are identical,
+including all 25 fenced code blocks (2 introduction, 3 quickstart, 20 guide).
+The previously validated staged solution and test progression weren't changed
+or rerun for this frontmatter/configuration update.
+
+### Revalidation
+
+- `npm.cmd run typecheck`: passed.
+- `npm.cmd run check -- --ci`: zero errors and warnings.
+- `npm.cmd run build`: passed; three authored MDX modules and 47 generated
+  routes/pages. Existing embedding skip and middleware warning remain.
+- A fresh production preview started with
+  `node node_modules/next/dist/bin/next start -p 3042`. Existing previews
+  weren't replaced. The current review URL is http://localhost:3042.
+- The navigation response contains one Guide collection with three direct
+  page nodes, the exact compact labels and expected destinations, and no
+  authored group ancestry.
+- Production HTML checks passed for `/`, `/introduction`, `/quickstart`, and
+  `/guides/task-filtering`: correct content headings, no rendered breadcrumb
+  navigation or group eyebrow, branding retained, and the compact sidebar
+  labels. Previous/next labels and their destinations passed on every page.
+- Routes, full-text search, unmatched search, sitemap, agent listings, removed
+  sample-page 404s, and preserved framework API descriptions passed again.
+  The filtering query returned two results, Expo Go returned three, and the
+  unmatched query returned zero; result links loaded successfully.
+- The first temporary navigation assertion assumed a derived `items` array
+  in the response. The actual wire format uses `nodes`; the test was corrected
+  to inspect that format and passed. No application change was needed.
+- `git diff --check`: passed before the local commit.
+
+### Layout limits and manual review
+
+The desktop sidebar suppresses a root section heading matching its collection.
+The mobile drawer uses the same root section with a heading and its own
+collection navigation, so it can still show a short Guide context label in
+more than one place. The inspected supported settings don't provide a separate
+switch to hide only that mobile heading. This is a runtime layout limitation,
+not another authored product-name group. No CSS or runtime edit was used to
+hide it.
+
+Branding is also used by the top bar and mobile drawer, and the site name
+remains in browser/social metadata and responsive markup. Counting raw HTML
+occurrences would conflate metadata and alternate layout surfaces with what a
+reader actually sees. The change removes the authored sources of repetition;
+it does not claim a visually verified single occurrence at every breakpoint.
+
+Desktop/mobile appearance, wrapping, keyboard navigation, and pagination
+interaction still require visual review. No new browser, accessibility, or
+physical-device result is claimed. Existing audit findings and embedding/device
+limitations remain documented above. This update is committed locally only;
+no push, Cloud deployment, or deployment-setting change was performed.

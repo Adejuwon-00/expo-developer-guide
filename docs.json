@@ -7,12 +7,10 @@
     "locales": [{ "code": "en", "label": "English" }]
   },
   "navbar": { "primary": { "label": "Get started", "href": "/quickstart" } },
+  "breadcrumbs": false,
   "tabs": [{
-    "tab": "Learn Expo",
-    "groups": [{
-      "group": "Expo for React developers",
-      "pages": ["introduction", "quickstart", "guides/task-filtering"]
-    }]
+    "tab": "Guide",
+    "pages": ["introduction", "quickstart", "guides/task-filtering"]
   }],
   "ai": { "chat": true }
 }
