@@ -3,12 +3,14 @@
 A practical learning resource for JavaScript and React developers building,
 running, and testing mobile applications with Expo and React Native.
 
-This repository currently contains the official Thally documentation scaffold.
-The Expo example and learning material will be added in later phases. The pages
-included with the scaffold are still Thally sample content.
+This repository contains the Thally documentation site and an independent
+[Expo task starter](examples/expo-task-starter/README.md). The documentation
+pages still contain Thally sample content; the Expo lessons come next.
 
-The intended documentation home is Thally Cloud. Cloud connection, production
-branch selection, and deployment have not yet been verified.
+Documentation site: https://expo-developer-guide.thally.app
+
+The example has its own dependencies and commands. Follow its README to run
+the mobile app; the root commands below run the documentation site.
 
 ## Local documentation development
 

@@ -37,6 +37,7 @@
     "**/*.mts"
   ],
   "exclude": [
+    "examples/expo-task-starter/**",
     "node_modules",
     "packages",
     "demo",
