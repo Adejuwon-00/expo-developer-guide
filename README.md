@@ -1,146 +1,77 @@
 # Expo for React Developers
 
-A practical learning resource for JavaScript and React developers building,
-running, and testing mobile applications with Expo and React Native.
+A practical learning resource for React developers building their first mobile
+app with Expo and React Native. The documentation is published with Thally.
 
-This repository contains the Thally documentation site and an independent
-[Expo task starter](examples/expo-task-starter/README.md). The documentation
-pages still contain Thally sample content; the Expo lessons come next.
+- [Introduction](https://expo-developer-guide.thally.app/introduction)
+- [Run the app on your phone](https://expo-developer-guide.thally.app/quickstart)
+- [Build and test task filtering](https://expo-developer-guide.thally.app/guides/task-filtering)
 
-Documentation site: https://expo-developer-guide.thally.app
+The [Expo task starter](examples/expo-task-starter/README.md) is an independent
+application with its own dependencies and lockfile. It has completion toggles
+but no filters: the practical guide teaches you to add them locally.
 
-The example has its own dependencies and commands. Follow its README to run
-the mobile app; the root commands below run the documentation site.
+## Run the example
 
-## Local documentation development
+From the repository root:
 
-Use Node.js 22.14+ in the Node 22 release line, or another version accepted by
-the `engines` field in `package.json`. Install the locked dependencies with
-`npm ci`, then start the documentation preview with `npm run dev`.
-The default address is `http://localhost:3040`.
+```sh
+cd examples/expo-task-starter
+npm ci
+npm start
+```
 
-Edit documentation in `src/content/`, navigation in `docs.json`, and site
-identity in `src/data/site.ts`. Keep the generated runtime and
-`starter-release.json` intact.
+Follow the example README for Expo Go setup and checks. Installing dependencies
+at the repository root doesn't install the example's dependencies.
 
-## Upstream scaffold reference
+## Work on the documentation
 
-A production-ready documentation site built with the open-source Thally runtime.
-Use this repository as a GitHub template or clone it directly, then replace the
-starter content with documentation for your product.
+Use Node.js 22.16.0 with npm 10.9.2 to match the checked environment. The root
+package's `engines` field lists other accepted Node.js versions.
 
-Thally is the product knowledge layer for software teams. This starter is its
-portable publishing foundation: your content stays in Git, and the same source
-can serve people, search engines, and AI tools.
+From the repository root:
 
-This is the canonical complete template consumed by Thally Cloud, the CLI, and
-the MCP server. Runtime code is authored once in
-[`thallylabs/thally`](https://github.com/thallylabs/thally), then generated into
-this repository as a pinned, byte-identical snapshot. Do not manually repeat a
-runtime fix in both repositories.
-
-This README covers the portable starter, not the full managed platform. The
-sole production architecture authority is
-[`thally-cloud/ARCHITECTURE.md`](https://github.com/thallylabs/thally-cloud/blob/main/ARCHITECTURE.md),
-available to maintainers with access to the private repository. The CLI, MCP,
-and Cloud creation flows consume an exact promoted scaffold release rather
-than treating the mutable `main` branch as a release identity.
-
-## Run locally
-
-```bash
-npm install
+```sh
+npm ci
 npm run dev
 ```
 
-Node.js 22.14+ or 24+ is recommended; Node.js 20.19+ is also supported.
-The checked-in npm lockfile makes `npm ci` the
-reproducible installation command. You can also use `pnpm install` or
-`yarn install`; use one package manager per project and commit its lockfile.
+Open http://localhost:3040. If PowerShell blocks `npm.ps1`, use `npm.cmd` in
+place of `npm`; you don't need to change the system execution policy.
 
-If installation is interrupted, keep your content and configuration. Remove
-only `node_modules`, then run `npm ci` again (or your selected package manager's
-install command). This repairs incomplete packages such as Shiki without
-recreating the site or deleting the dependency lockfile.
+Pages live in `src/content/`, navigation in `docs.json`, and site identity in
+`src/data/site.ts`. The published learning path uses the same source as the
+local preview.
 
-Open [http://localhost:3040](http://localhost:3040). If that port is occupied,
-choose another with `npm run dev -- --port 3041`.
+Before committing documentation changes:
 
-The default project runs Next.js directly and does not install the Thally CLI.
-Use `npm run check` to validate documentation and `npm run starter:update` to
-preview framework updates. These commands explicitly invoke the current official
-`@thallylabs/cli` package, so a frozen local CLI cannot block a newer scaffold.
-Pass update options after `--`, for example `npm run starter:update -- --apply`
-after reviewing the dry run. For other commands, run
-`npx --yes --package=@thallylabs/cli@latest thally --help`.
-
-## Make it yours
-
-- Edit pages in `src/content/`.
-- Organize navigation and features in `docs.json`.
-- Set the product name, links, and versioned brand defaults in `src/data/site.ts`.
-- Replace `openapi.yaml` with your API specification.
-- Add logos or favicons in `public/` and reference them from your site settings.
-
-`starter-release.json` records the immutable starter and runtime version used
-to create the site. Keep it in the repository so `npm run starter:update` can
-plan framework updates without overwriting your content or portable settings.
-
-`npm run starter:update` performs a three-way comparison between the recorded
-previous scaffold, the promoted target scaffold, and your current project. It
-updates unchanged framework-owned files, preserves user-owned files, and stops
-for manual review when those contracts overlap. The command is a dry run until
-you pass `--apply`.
-
-Maintainers update the generated runtime snapshot through the **Sync Thally
-runtime** workflow. CI rejects a changed pin without matching files, changed
-files without a matching pin, missing files, and stale runtime files.
-
-Content icons are neutral by default. Set `appearance.contentIcons` to `accent`
-in `docs.json`, or add `iconColor="accent"` to an individual card or tile.
-Public page URLs ending in `.md` are disabled by default; enable them explicitly
-with `markdown.enabled` when that distribution surface fits your access model.
-
-## Validate changes
-
-```bash
-npm run check
+```sh
 npm run typecheck
+npm run check -- --ci
 npm run build
 ```
 
-CI runs the same content check with the pinned workflow tooling:
-`npm ci --ignore-scripts --prefix .github/thally-tooling`, then
-`.github/thally-tooling/node_modules/.bin/thally check --ci .`.
+The content check invokes the official Thally CLI and may need registry
+access. The production preview is `npm start`, on port 3040. These root
+commands run the documentation site; the example's `npm start` runs Expo.
 
-## Deploy
+## Keep the framework boundary clear
 
-The site is a standard Next.js application. Deploy it through Thally Cloud or
-any compatible Next.js host. Cloudflare Workers configuration is included in
-`open-next.config.ts` and `wrangler.jsonc`. Provider deployment packages and
-Thally’s internal test suites are excluded from the default installation.
-Thally Cloud supplies its own pinned deployment tooling. For self-hosted
-Cloudflare builds, install the optional provider profile explicitly:
+The generated Thally runtime and `starter-release.json` describe a pinned
+framework snapshot. Don't edit runtime files to change documentation. Use
+`npm run starter:update` to review a framework update plan before applying it.
+See [AGENTS.md](AGENTS.md) for repository ownership and authoring rules.
 
-```bash
-npm run setup:cloudflare
-npm run build:cloudflare
-```
+Cloud publishes from the connected GitHub repository. A successful push alone
+doesn't verify a live deployment; check its revision and published pages.
+Keep credentials outside source control.
 
-The setup command records exact OpenNext and Wrangler versions in your project.
-Other Next.js hosts need only the default installation.
+## Validation records
 
-Thally Cloud publishes an immutable managed site release and activates it by
-moving the site's production pointer only after validation. Direct hosts use
-their own release and rollback mechanisms; publishing a package or synchronizing
-this starter does not move an existing site's pointer.
-
-On Vercel, the site URL used for canonical and agent links is detected
-automatically. On other hosts, for a custom domain, or on Cloudflare Workers,
-set `THALLY_SITE_URL` in your host's environment.
-
-Copy `.env.example` to `.env.local` only when you need optional services. Never
-commit real credentials.
+[Setup notes](assessment/setup-notes.md) retain the documentation dependency
+audit and optional embedding limitation. [Phase 2 validation](assessment/phase-2-validation.md)
+separates automated app checks from the reported iPhone test. [Phase 3 validation](assessment/phase-3-validation.md) covers the documentation
+and isolated tutorial checks.
 
 ## License
 

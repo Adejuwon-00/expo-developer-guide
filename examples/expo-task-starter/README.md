@@ -98,3 +98,8 @@ Documentation: https://expo-developer-guide.thally.app
 
 See the repository's `assessment/phase-2-validation.md` for command results,
 tooling fixes, and remaining dependency warnings.
+
+Learning path: [Introduction](https://expo-developer-guide.thally.app/introduction),
+[Quickstart](https://expo-developer-guide.thally.app/quickstart), and
+[Build and test task filtering](https://expo-developer-guide.thally.app/guides/task-filtering).
+The filtering lesson extends this starter locally; the committed app remains unfiltered.

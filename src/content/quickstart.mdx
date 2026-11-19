@@ -1,47 +1,137 @@
 ---
-title: Quickstart
-description: Guide a new reader through one useful workflow and show them how to verify it.
+title: Run the app on your phone
+description: Clone the repository, install the isolated Expo example, and open the task list in Expo Go.
 ---
 
-A strong quickstart produces one meaningful result. Replace the placeholders
-below with the shortest supported path for your product.
+By the end, you'll have **Task starter** open on your phone, with three tasks
+you can mark complete or bring back.
 
 ## Before you begin
 
-List only the requirements needed for this workflow:
+- Install [Git](https://git-scm.com/downloads) and Node.js with npm. This
+  example was checked with **Node.js 22.16.0 and npm 10.9.2**. Its Node engine
+  accepts `^22.13.0 || ^24.3.0 || ^26.0.0 || >=27.0.0`; use the checked Node 22
+  environment to reproduce these instructions.
+- Install [Expo Go](https://expo.dev/go) with **Expo SDK 58** support. The
+  example locks Expo 58.0.26, React 19.3.0, and React Native 0.88.1. Resolve a
+  client mismatch before proceeding; don't upgrade the example at random.
+- Connect your phone and computer to the same Wi-Fi network.
 
-- An account or credential, when required
-- A supported runtime, device, browser, or operating system
-- Permission to create or change the resource used in the example
+You don't need a Thally account, an Expo account, Xcode, or Android Studio
+for this local Expo Go workflow. The commands work in a terminal on Windows,
+macOS, or Linux; this project's automated checks ran on Windows.
 
-<Steps>
-  <Step title="Install the required tool">
-    Give readers one recommended installation command.
+## Clone and install the example
 
-    ```bash
-    npm install your-package
-    ```
-  </Step>
-  <Step title="Add the minimum configuration">
-    Include only the values needed for the first successful run.
+Run these commands from the directory where you keep projects:
 
-    ```bash
-    your-cli init
-    ```
-  </Step>
-  <Step title="Complete the first task">
-    Use a realistic example that produces an observable result.
+```sh
+git clone https://github.com/Adejuwon-00/expo-developer-guide.git
+cd expo-developer-guide/examples/expo-task-starter
+npm ci
+```
 
-    ```bash
-    your-cli start
-    ```
-  </Step>
-  <Step title="Verify the result">
-    State exactly what the reader should see and how to recover when it does not appear.
-  </Step>
-</Steps>
+The example has its own `package.json` and lockfile. `npm ci` installs the
+locked versions. You don't need to install anything in the repository root:
+those dependencies belong to the Thally documentation site.
 
-## Choose the next task
+Installation can report dependency advisories and deprecation warnings. The
+[validation notes](https://github.com/Adejuwon-00/expo-developer-guide/blob/main/assessment/phase-2-validation.md)
+record existing findings. Don't run `npm audit fix --force`; its proposed
+changes can replace compatible Expo and test-tooling versions.
 
-Link to the guide that naturally follows this result. Avoid ending the reader’s
-journey with a generic list of every feature.
+## Start Expo
+
+From `examples/expo-task-starter`, run:
+
+```sh
+npm start
+```
+
+This runs the local Expo CLI. Leave the terminal open. Metro starts and
+prints a connection address and QR code. Use `npm start` here; `npm run dev`
+starts the documentation site from the repository root.
+
+### Open it on an iPhone
+
+Open the Camera app, scan the terminal's QR code, and follow the link to Expo
+Go. Allow local-network access if iOS asks. Keep the development server running.
+
+### Open it on Android
+
+Open Expo Go and use its QR scanner to scan the terminal code. This follows
+[Expo's device workflow](https://docs.expo.dev/get-started/start-developing/).
+Physical Android testing has not been completed for this project.
+
+<Note type="info" title="What has been verified">
+The project author reported successfully launching and testing the starter
+on a physical iPhone through Expo Go. The model, iOS version, and individual
+smoke-test results weren't supplied. Automated tests cover task state, and
+Android and iOS bundles and development manifests passed checks. Those checks
+don't establish device accessibility, layout, or interaction behavior.
+</Note>
+
+## Check the screen
+
+You should see **Task starter**, the instruction to tap a task, and these rows:
+
+| Task | Initial status |
+| --- | --- |
+| Run the app on your phone | Not completed |
+| Mark a task complete | Not completed |
+| Explore the starter code | Completed |
+
+Tap a row. Its checkbox, text treatment, and status should change together.
+Tap it again to reverse the change. Other tasks should keep their state.
+These are expected results to check, not a claim that each behavior was
+individually confirmed in the reported iPhone test.
+
+Press `r` in the terminal for a full reload: the initial tasks should return.
+There is no persistence. Returning from the background or using Fast Refresh
+may keep state. Press `Ctrl+C` to stop the server.
+
+Use the [example README checklist](https://github.com/Adejuwon-00/expo-developer-guide/blob/main/examples/expo-task-starter/README.md#check-on-both-phones)
+for larger text, safe areas, and VoiceOver or TalkBack. Those individual device
+checks remain unconfirmed.
+
+## If something gets stuck
+
+### npm can't find the start script
+
+Check your current directory. The file beside your terminal should be
+`examples/expo-task-starter/package.json`, whose `start` script is `expo start`.
+The repository root runs Thally, not the mobile app.
+
+### PowerShell blocks npm.ps1
+
+If PowerShell reports that scripts are disabled, run `npm.cmd ci` and
+`npm.cmd start` instead of `npm ci` and `npm start`. These invoke the same npm
+installation without changing your system execution policy.
+
+### Expo Go can't reach the server
+
+Check that both devices use the same Wi-Fi network. VPNs and guest-network
+isolation can prevent local connections. On Windows, allow Node.js through
+the firewall for your trusted **private** network when prompted. On iPhone,
+check Expo Go's local-network permission in Settings. Reopen the QR link after
+correcting the connection. Don't disable your firewall globally.
+
+### Expo Go reports an incompatible SDK
+
+Check SDK 58 support on [Expo Go's compatibility page](https://expo.dev/go).
+The client and project SDK must agree. On a physical iPhone, the App Store
+provides the current Expo Go version; older versions aren't generally
+installable through that workflow. Keep the lockfile intact and resolve the
+client mismatch rather than changing dependencies blindly.
+
+### Installation didn't finish
+
+Stay in the example directory and retry `npm ci` once your registry connection
+works. Keep the lockfile. If it fails again, inspect the npm error before
+changing dependencies. A warning alone isn't a failed installation.
+
+## Make the next change
+
+Open `App.tsx` and find `initialTasks`, the state declaration, and `toggleTask`.
+The screen has no filters yet. Next,
+[build and test task filtering](/guides/task-filtering).
