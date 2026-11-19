@@ -4,22 +4,30 @@ navTitle: Task filtering
 description: Choose a filter, show matching tasks, explain empty results, and test each behavior.
 ---
 
-Give the task list three views: **All**, **Active**, and **Completed**. You'll
-build the change in three runnable stages, then add tests for the behavior.
+Your task list is running. Now let's make it easier to find what matters.
+
+You'll add three filters—All, Active, and Completed—then test that they show the right tasks without changing or losing any data.
+
 No new packages are needed.
 
-## Start from the working screen
+1. **Add filter controls** — Let users choose which tasks to see.
+2. **Show matching tasks** — Update the list based on the selection.
+3. **Handle empty results** — Explain when no tasks match.
+4. **Test the behavior** — Verify filtering, task updates, and empty states.
 
-Finish the [quickstart](/quickstart) first. Work in
-`examples/expo-task-starter`. The committed starter has completion controls
-but no filters; this guide adds them in your local copy.
+Each stage ends with a checkpoint. Finish it before moving on.
 
-Open `App.tsx` in your editor. Its `App` function is the screen component.
-The `tasks` state holds the task objects, and `toggleTask` changes one task's
-completion status. Keep that handler unchanged throughout the guide.
+## Start from the unfiltered starter
 
-Keep `npm start` running in one terminal. Open a second terminal at the
-repository root and run:
+Complete the [quickstart](/quickstart) first. Work in `examples/expo-task-starter/` and edit `App.tsx`. Start from the committed app, which has completion toggles but no filters. Keep its `toggleTask` handler and `__tests__/App.test.tsx` unchanged.
+
+From the example directory, keep Metro running in one terminal:
+
+```sh
+npm start
+```
+
+Open a second terminal at the repository root and establish your validation routine:
 
 ```sh
 cd examples/expo-task-starter
@@ -28,20 +36,13 @@ npm run lint
 npm test
 ```
 
-These check TypeScript types, lint rules, and automated behavior respectively.
-You should have **one passing suite and four passing tests**. Keep the original
-`__tests__/App.test.tsx`: every stage below should preserve those behaviors.
-Run later commands from this same example directory.
+Expect **one passing suite and four passing tests**. At each checkpoint, rerun these three checks from this second terminal. Save edits and press `r` in the Metro terminal for a full reload before checking initial states.
 
-## 1. Make the filter controls respond
+## 1. Add filter controls
 
-Start with the choice itself. React's `useState` remembers a value between
-renders; its setter changes that value and asks React to render again. You'll
-use it to show which control is selected before changing the task list.
+### Change
 
-### Add the options and selection
-
-In `App.tsx`, add this after the existing `Task` type and before `initialTasks`:
+Immediately before `const initialTasks: Task[] = [` in `App.tsx`, add:
 
 ```tsx
 type Filter = 'all' | 'active' | 'completed';
@@ -53,70 +54,55 @@ const filters: { value: Filter; label: string }[] = [
 ];
 ```
 
-`Filter` is a TypeScript union: the value must be one of those three strings.
-The annotation on `filters` describes an array of objects with a typed `value`
-and a text `label`. It catches misspelled choices while keeping the visible
-labels separate from their lowercase values.
-
-Immediately after the existing `tasks` state declaration inside `App`, add:
+Inside `App`, replace the existing `tasks` state declaration with these two declarations:
 
 ```tsx
+const [tasks, setTasks] = useState<Task[]>(initialTasks);
 const [filter, setFilter] = useState<Filter>('all');
 ```
 
-`filter` is the current choice; `setFilter` changes it. `'all'` is the initial
-value. The `<Filter>` annotation tells TypeScript which choices are allowed.
-Keep this call at the top level of `App`, beside the existing `useState` call,
-so React can associate each state value with the component consistently.
-
-### Render the controls and their styles
-
-The starter uses `FlatList` to render task rows from an array. Its
-`ListHeaderComponent` prop supplies content above those rows. Inside that
-header, insert this `View` after the description's closing `</Text>` and
-before the header's closing `</View>`:
+In `FlatList`, replace the entire `ListHeaderComponent={...}` prop with the following. The existing title and description stay inside the header, followed by the controls:
 
 ```tsx
-<View style={styles.filters}>
-  {filters.map((option) => (
-    <Pressable
-      key={option.value}
-      accessibilityRole="button"
-      accessibilityLabel={option.label}
-      accessibilityState={{ selected: filter === option.value }}
-      onPress={() => setFilter(option.value)}
-      style={({ pressed }) => [
-        styles.filterButton,
-        filter === option.value && styles.selectedFilter,
-        pressed && styles.pressedFilter,
-      ]}
-    >
-      <Text
-        style={[
-          styles.filterLabel,
-          filter === option.value && styles.selectedFilterLabel,
-        ]}
-      >
-        {option.label}
-      </Text>
-    </Pressable>
-  ))}
-</View>
+ListHeaderComponent={
+  <View style={styles.header}>
+    <Text accessibilityRole="header" style={styles.heading}>Task starter</Text>
+    <Text style={styles.description}>
+      Tap a task to mark it complete. Tap again to bring it back.
+    </Text>
+    <View style={styles.filters}>
+      {filters.map((option) => (
+        <Pressable
+          key={option.value}
+          accessibilityRole="button"
+          accessibilityLabel={option.label}
+          accessibilityState={{ selected: filter === option.value }}
+          onPress={() => setFilter(option.value)}
+          style={({ pressed }) => [
+            styles.filterButton,
+            filter === option.value && styles.selectedFilter,
+            pressed && styles.pressedFilter,
+          ]}
+        >
+          <Text
+            style={[
+              styles.filterLabel,
+              filter === option.value && styles.selectedFilterLabel,
+            ]}
+          >
+            {option.label}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
+  </View>
+}
 ```
 
-`map` creates one control for each option. The `key` gives each one a stable
-identity. `onPress` receives a function that calls `setFilter` when you tap;
-it doesn't call the setter while the screen is rendering. The equality check
-`filter === option.value` identifies the selected option.
-
-`Pressable`, `Text`, and `View` are already imported. Each control exposes a
-button role, label, and selected state to accessibility services. Visible
-styling also needs to show the choice; color alone isn't enough.
-
-Add these entries inside the existing `StyleSheet.create({ ... })` object,
-before its closing `});`. Keep all existing entries:
+In `StyleSheet.create`, replace the existing `header` entry with the following entries. Keep the rest of the stylesheet:
 
 ```tsx
+header: { marginBottom: 20, gap: 12 },
 filters: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
 filterButton: {
   minHeight: 48,
@@ -136,41 +122,27 @@ filterLabel: { fontSize: 16, color: '#172126' },
 selectedFilterLabel: { fontWeight: '700' },
 ```
 
-The `style` callback receives whether the control is being pressed. In its
-array, `condition && style` includes that style only when the condition is
-true. The selected control has a green border, tinted background, and heavier
-text. Controls can wrap and grow with larger text; their minimum height of
-48 logical units keeps the press target usable without fixing the row height.
+### Why
 
-### Check the selection before filtering
+The `Filter` union limits the choice to three strings; `filter` stores the current choice, initially `'all'`. The controls use the existing imports and expose button labels and selected states to accessibility services.
 
-Save `App.tsx`. In the Metro terminal, press `r` for a full reload. **All**
-should start selected. Press **Active**, then **Completed**: the selected
-styling should move, but **all three tasks should still be visible**. That's
-the intended checkpoint; the next step will connect the choice to the rows.
+A heavier label supplements the selected border and background, so the choice is not shown by color alone. Controls wrap and grow with larger text, with minimum 48-unit touch targets rather than fixed heights.
 
-In the second terminal, run:
+### Check
 
-```sh
-npm run typecheck
-npm run lint
-npm test
-```
+Reload: **All** starts selected. Press **Active** and **Completed**; selection should move, but **all three tasks stay visible**. Filtering comes next. Run the validation routine: the original **four tests** should pass.
 
-All checks should pass, including the original four tests. If the controls
-don't appear, check that the new `View` is inside `ListHeaderComponent`. If a
-style name is missing, check its spelling and that it is inside
-`StyleSheet.create`. Don't move on until selection changes correctly.
+If controls are missing, check that you replaced the header prop, not the whole list. For missing styles, compare the names and check that their entries are inside `StyleSheet.create`.
 
-## 2. Show only the matching tasks
+## 2. Show matching tasks
 
-Now use the choice to calculate the visible rows. JavaScript's `filter`
-method builds a new array containing items for which its callback returns
-`true`. It doesn't remove items from the original array.
+### Change
 
-After the `filter` state declaration, before `toggleTask`, add:
+Replace the `filter` state declaration with this declaration and calculation, leaving `tasks` above it and `toggleTask` below it:
 
 ```tsx
+const [filter, setFilter] = useState<Filter>('all');
+
 const visibleTasks = tasks.filter((task) => {
   if (filter === 'active') return !task.completed;
   if (filter === 'completed') return task.completed;
@@ -178,60 +150,43 @@ const visibleTasks = tasks.filter((task) => {
 });
 ```
 
-For Active, `!task.completed` keeps unfinished tasks: `!` reverses a boolean.
-For Completed, keep finished tasks. For All, return `true` for every task.
-This is a derived value: calculate it from the current tasks and choice on
-each render instead of keeping a second array in state. Three tasks don't
-need memoization or an effect to keep two lists synchronized.
+In `FlatList`, change only its `data` prop. Before:
 
-In `FlatList`, replace `data={tasks}` with:
+```tsx
+data={tasks}
+```
+
+After:
 
 ```tsx
 data={visibleTasks}
 ```
 
-`data` is the array the list displays. Leave `keyExtractor` and `renderItem`
-unchanged: they still identify and render each task. This implementation
-passes a new derived array on each render, so it doesn't need `extraData`.
+### Why
 
-### Check the lists and a changing task
+`visibleTasks` is derived from the full task array and current choice on each render. Active keeps unfinished tasks; Completed keeps finished tasks; All keeps everything. There is no second array in state to synchronize and no effect or memoization needed for three tasks.
 
-Save and reload, then select each filter:
+Leave `toggleTask`, `keyExtractor`, and `renderItem` unchanged. Updating only the visible array would lose hidden tasks. The new derived array also lets `FlatList` receive the changed data without adding `extraData`.
 
-| Filter | Expected initial rows |
+### Check
+
+Reload, then select each filter:
+
+| Filter | Expected initial tasks |
 | --- | --- |
 | All | All three tasks |
 | Active | Run the app on your phone; Mark a task complete |
 | Completed | Explore the starter code |
 
-Select **Active** and complete **Run the app on your phone**. It should
-leave Active immediately. Select **Completed** to find it checked there,
-then reopen it. It should leave Completed and reappear in Active.
+Complete **Run the app on your phone** while viewing Active. It should disappear there and appear checked under Completed and All. Reopen it from Completed: it leaves that view and returns to Active. Filtering changes what you see; toggling changes completion state.
 
-The task wasn't deleted: its status stopped matching the current view.
-`toggleTask` must still update the full `tasks` array. Mapping over only
-`visibleTasks` would lose tasks hidden by the filter.
+Run the validation routine: **four tests** should pass. If every filter still shows three tasks, check `data={visibleTasks}`. If the initial view has fewer, check that `filter` starts as `'all'`.
 
-Run the checkpoint checks again:
+## 3. Handle empty results
 
-```sh
-npm run typecheck
-npm run lint
-npm test
-```
+### Change
 
-The original four tests should still pass because All remains the default.
-If every filter shows three rows, check the `data` replacement. If the first
-screen or original tests show fewer rows, check the initial filter is `'all'`.
-An empty filter currently shows no task rows; next you'll give it an explanation.
-
-## 3. Explain an empty view
-
-Completing the last active task shouldn't leave the reader wondering whether
-the app stopped working. Give each empty view a message, with the controls
-still available to switch back to All.
-
-After the `visibleTasks` calculation and before `toggleTask`, add:
+Immediately before `function toggleTask(id: string) {`, add:
 
 ```tsx
 const emptyMessage =
@@ -242,63 +197,42 @@ const emptyMessage =
       : 'No tasks to show.';
 ```
 
-This conditional expression chooses a message from the current filter. Read
-it as: if Active, use the first message; otherwise, if Completed, use the
-second; otherwise, use the final message. The All fallback is defensive:
-this fixed starter has no way to remove every task.
-
-Add this prop to `FlatList` immediately after `data={visibleTasks}`:
+In `FlatList`, replace the consecutive `data={visibleTasks}` and `keyExtractor` props with:
 
 ```tsx
+data={visibleTasks}
 ListEmptyComponent={
   <Text style={styles.emptyMessage}>{emptyMessage}</Text>
 }
+keyExtractor={(task) => task.id}
 ```
 
-`ListEmptyComponent` renders when `data` has no items. Add its style inside
-the existing `StyleSheet.create` object:
+In `StyleSheet.create`, replace the `selectedFilterLabel` entry with:
 
 ```tsx
+selectedFilterLabel: { fontWeight: '700' },
 emptyMessage: { fontSize: 17, lineHeight: 26, color: '#46545C', paddingVertical: 20 },
 ```
 
-### Check both empty states
+### Why
 
-1. Save and reload. Select **Active**, then complete **Run the app on your
-   phone** and **Mark a task complete**. Each row should disappear. Expect
-   **No active tasks. Everything is complete.** Return to **All**: all three
-   tasks should still exist and be complete.
-2. Reload to restore the initial tasks and All selection. Select **Completed**,
-   then reopen **Explore the starter code**. Expect **No completed tasks yet.**
-   Return to **All**: all three tasks should be present and incomplete.
+`ListEmptyComponent` explains why no rows match instead of leaving a blank list. Its message follows the selected filter. The All fallback is defensive: this starter has no delete action. The controls stay in the list header, available when no rows match and inside the scrolling content when text grows.
 
-The header stays visible even when there are no rows. Keeping its controls
-inside the scrolling list also lets the screen accommodate larger text.
-If you see a blank list without a message, check that `ListEmptyComponent`
-is a prop on `FlatList` and that its style name matches.
+### Check
 
-Run the checkpoint checks:
+**No active tasks:** Reload, select Active, and complete **Run the app on your phone** and **Mark a task complete**. Expect **No active tasks. Everything is complete.** Return to All: all three tasks remain and are complete.
 
-```sh
-npm run typecheck
-npm run lint
-npm test
-```
+**No completed tasks:** Reload to restore the initial state, select Completed, and reopen **Explore the starter code**. Expect **No completed tasks yet.** Return to All: all three remain and are incomplete.
 
-You should still have four passing tests. Those protect the starter's
-behavior; next you'll add tests specifically for the feature you've built.
+Run the validation routine: **four tests** should still pass. If the message is missing, check the `ListEmptyComponent` prop and its style name. You should still be able to change filters from either empty view.
 
-## 4. Turn those checks into tests
+## 4. Test the behavior
 
-The project already includes Jest and React Native Testing Library. A test
-renders the screen, finds controls by their accessible role and label, acts
-on them, and checks the visible result. This exercises the interface rather
-than calling a filtering function in isolation.
+Jest and React Native Testing Library are already configured. Keep the original four starter tests. Add the following tests beside them; no package installation is needed.
 
-### Confirm the initial selection
+### Start with the selected state
 
-Create `__tests__/Filtering.test.tsx` beside `App.test.tsx` with these complete
-contents:
+Create `__tests__/Filtering.test.tsx` with these complete contents:
 
 ```tsx
 import { render, screen } from '@testing-library/react-native';
@@ -311,33 +245,19 @@ test('starts on All and exposes the selected filter', async () => {
   expect(screen.getByRole('button', { name: 'Active', selected: false })).toBeOnTheScreen();
   expect(screen.getByRole('button', { name: 'Completed', selected: false })).toBeOnTheScreen();
 });
-
 ```
 
-`render` creates a test instance of the screen. `screen` queries that instance;
-`expect` checks the result. The `selected` query verifies the accessibility
-state exposed by the button, not just the presence of its label. The async
-function and `await` let the test wait for the render to settle.
+`render` creates the test screen; `screen` finds its controls. The role, label, and `selected` queries check the accessibility state, not just visible text. Run `npm test`: expect **two suites and five passing tests**. If it fails, check the initial filter and `accessibilityState.selected`.
 
-Run:
+### Check matching views
 
-```sh
-npm test
-```
-
-Expect **two passing suites and five passing tests**: four original tests and
-the new initial-selection test. If it fails, check that All starts selected
-and the controls expose `accessibilityState.selected`.
-
-### Confirm which tasks each view contains
-
-Replace the first import line in `Filtering.test.tsx` with:
+To trigger presses, replace the first import line with:
 
 ```tsx
 import { fireEvent, render, screen } from '@testing-library/react-native';
 ```
 
-Immediately after the imports and before the first test, add:
+Immediately after both imports and before the first test, add:
 
 ```tsx
 const runTitle = 'Run the app on your phone';
@@ -349,115 +269,36 @@ async function selectFilter(name: string) {
 }
 ```
 
-`fireEvent.press` triggers the control's press handler. The helper finds a
-filter by its button label, so the tests don't depend on where it sits on the
-screen. Append this test after the first one:
+Open the [complete filtering tests](/references/task-filtering/Filtering.test.tsx.txt). Copy the entire second `test(...)` block, named `shows the matching tasks without changing their status`, and append it after your first test. Include its closing `});`; do not copy the imports or helpers again.
 
-```tsx
-test('shows the matching tasks without changing their status', async () => {
-  await render(<App />);
-  await selectFilter('Active');
-  expect(screen.getByRole('button', { name: 'Active', selected: true })).toBeOnTheScreen();
-  expect(screen.getByRole('button', { name: 'All', selected: false })).toBeOnTheScreen();
-  expect(screen.getAllByRole('checkbox')).toHaveLength(2);
-  expect(screen.getByRole('checkbox', { name: runTitle })).not.toBeChecked();
-  expect(screen.getByRole('checkbox', { name: completeTitle })).not.toBeChecked();
-  expect(screen.queryByRole('checkbox', { name: exploreTitle })).toBeNull();
+This test checks Active and Completed membership and selected states, then returns to All to check that switching views preserved completion states. Run `npm test`: expect **two suites and six passing tests**.
 
-  await selectFilter('Completed');
-  expect(screen.getByRole('button', { name: 'Completed', selected: true })).toBeOnTheScreen();
-  expect(screen.getByRole('button', { name: 'Active', selected: false })).toBeOnTheScreen();
-  expect(screen.getAllByRole('checkbox')).toHaveLength(1);
-  expect(screen.getByRole('checkbox', { name: exploreTitle })).toBeChecked();
+### Check transitions and empty views
 
-  await selectFilter('All');
-  expect(screen.getAllByRole('checkbox')).toHaveLength(3);
-  expect(screen.getByRole('checkbox', { name: runTitle })).not.toBeChecked();
-  expect(screen.getByRole('checkbox', { name: exploreTitle })).toBeChecked();
-});
+From the same [reference test file](/references/task-filtering/Filtering.test.tsx.txt), append the last two complete `test(...)` blocks, including their closing `});` lines:
 
-```
+- `removes completed tasks from Active and preserves them in All`
+- `removes reopened tasks from Completed and explains an empty view`
 
-Run `npm test` again. Expect **two suites and six passing tests**. This catches
-a correct-looking control that never changes the list's `data`, and confirms
-that switching filters doesn't change task status.
+They complete the remaining Active tasks or reopen the Completed task, check the exact empty messages and available controls, then return to All to verify the full task array and updated states.
 
-### Confirm transitions and recovery from empty results
+Run the validation routine: expect **two suites and eight passing tests**. If tasks disappear permanently, check that `toggleTask` still updates `tasks`. For empty-message failures, compare the exact strings and list prop.
 
-Finally, append these two tests. They reproduce the two empty-state checks
-above and confirm that returning to All preserves the updated tasks:
+## Compare with the complete reference
 
-```tsx
-test('removes completed tasks from Active and preserves them in All', async () => {
-  await render(<App />);
-  await selectFilter('Active');
-  await fireEvent.press(screen.getByRole('checkbox', { name: runTitle }));
-  expect(screen.queryByRole('checkbox', { name: runTitle })).toBeNull();
-  expect(screen.getByRole('checkbox', { name: completeTitle })).not.toBeChecked();
-  await fireEvent.press(screen.getByRole('checkbox', { name: completeTitle }));
-  expect(screen.queryAllByRole('checkbox')).toHaveLength(0);
-  expect(screen.getByText('No active tasks. Everything is complete.')).toBeOnTheScreen();
-  expect(screen.getByRole('button', { name: 'Active', selected: true })).toBeOnTheScreen();
+The [completed screen](/references/task-filtering/App.tsx.txt) and [full filtering test file](/references/task-filtering/Filtering.test.tsx.txt) are plain-text downloads. Open a link and save the complete text, removing only the final `.txt` from its filename:
 
-  await selectFilter('All');
-  expect(screen.getAllByRole('checkbox')).toHaveLength(3);
-  expect(screen.getByRole('checkbox', { name: runTitle })).toBeChecked();
-  expect(screen.getByRole('checkbox', { name: completeTitle })).toBeChecked();
-  expect(screen.getByRole('checkbox', { name: exploreTitle })).toBeChecked();
-  expect(screen.queryByText('No active tasks. Everything is complete.')).toBeNull();
-});
+- Save the screen as `App.tsx` in your local example.
+- Save the tests as `__tests__/Filtering.test.tsx`, alongside the unchanged `App.test.tsx`.
 
-test('removes reopened tasks from Completed and explains an empty view', async () => {
-  await render(<App />);
-  await selectFilter('Completed');
-  await fireEvent.press(screen.getByRole('checkbox', { name: exploreTitle }));
-  expect(screen.queryByRole('checkbox', { name: exploreTitle })).toBeNull();
-  expect(screen.queryAllByRole('checkbox')).toHaveLength(0);
-  expect(screen.getByText('No completed tasks yet.')).toBeOnTheScreen();
-  expect(screen.getByRole('button', { name: 'Completed', selected: true })).toBeOnTheScreen();
+Replacing the screen skips the implementation checkpoints; use it to compare your work or recover after a blocked edit. These files use the starter's existing packages and settings. Run the validation routine after copying them: **eight tests** should pass.
 
-  await selectFilter('All');
-  expect(screen.getAllByRole('checkbox')).toHaveLength(3);
-  expect(screen.getByRole('checkbox', { name: exploreTitle })).not.toBeChecked();
-  expect(screen.queryByText('No completed tasks yet.')).toBeNull();
-});
-```
+## Check on your phone
 
-Run the full checks:
+Increase system text size and check wrapping, scrolling, and safe areas. With VoiceOver or TalkBack, check filter labels and selected-state announcements, access to controls beside empty messages, and where focus moves after a task disappears. Mocked tests cannot establish those native behaviors.
 
-```sh
-npm run typecheck
-npm run lint
-npm test
-```
+The earlier iPhone launch report applies to the unfiltered starter, not these filters. See the [validation record](https://github.com/Adejuwon-00/expo-developer-guide/blob/main/assessment/phase-3-validation.md) for automated results and unverified device checks.
 
-Expect **two passing suites and eight passing tests**. If a hidden task is
-lost when you return to All, check that `toggleTask` still maps over `tasks`.
-If the empty-state assertions fail, check both the list prop and message text.
+You now have one task array and a view derived from a separate filter choice. Keep these behavior tests when you make your next change.
 
-## Check what automated tests can't establish
-
-On your phone, increase the system text size and check wrapping, scrolling,
-and safe areas. With VoiceOver or TalkBack, check each filter's label and
-selected state. Activate a task that disappears from the current view and
-observe where accessibility focus moves. Mocked tests can't establish these
-native behaviors.
-
-<Note type="info" title="Verification status">
-The staged tutorial is checked in an isolated copy with TypeScript, lint,
-behavior tests, and Android/iOS bundle generation. The committed starter
-remains unfiltered. The earlier reported iPhone test applies to that starter,
-not these filters. Physical-device filtering, reloads, layout, announcements,
-and focus behavior remain unverified.
-</Note>
-
-## What you can build on
-
-You've added one independent choice to state and derived the view from it.
-There is still one task array to update if you later add task creation or
-storage. Keep the tests as a starting point when changing that behavior.
-
-For a deeper explanation, see [React state](https://react.dev/learn/state-a-components-memory),
-[React Native accessibility](https://reactnative.dev/docs/accessibility),
-[FlatList](https://reactnative.dev/docs/flatlist), and
-[Expo testing](https://docs.expo.dev/develop/unit-testing/).
+For more detail, see [React state](https://react.dev/learn/state-a-components-memory), [React Native accessibility](https://reactnative.dev/docs/accessibility), [FlatList](https://reactnative.dev/docs/flatlist), and [Expo testing](https://docs.expo.dev/develop/unit-testing/).

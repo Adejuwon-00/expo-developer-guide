@@ -1,0 +1,197 @@
+import { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+type Task = {
+  id: string;
+  title: string;
+  completed: boolean;
+};
+
+type Filter = 'all' | 'active' | 'completed';
+
+const filters: { value: Filter; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'active', label: 'Active' },
+  { value: 'completed', label: 'Completed' },
+];
+
+const initialTasks: Task[] = [
+  { id: 'run-app', title: 'Run the app on your phone', completed: false },
+  { id: 'complete-task', title: 'Mark a task complete', completed: false },
+  { id: 'explore-code', title: 'Explore the starter code', completed: true },
+];
+
+export default function App() {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const [filter, setFilter] = useState<Filter>('all');
+
+  const visibleTasks = tasks.filter((task) => {
+    if (filter === 'active') return !task.completed;
+    if (filter === 'completed') return task.completed;
+    return true;
+  });
+
+  const emptyMessage =
+    filter === 'active'
+      ? 'No active tasks. Everything is complete.'
+      : filter === 'completed'
+        ? 'No completed tasks yet.'
+        : 'No tasks to show.';
+
+  function toggleTask(id: string) {
+    // Read the latest state, including presses React has queued together.
+    setTasks((currentTasks) =>
+      currentTasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task,
+      ),
+    );
+  }
+
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.screen}>
+        <StatusBar style="dark" />
+        <FlatList
+          data={visibleTasks}
+          ListEmptyComponent={
+            <Text style={styles.emptyMessage}>{emptyMessage}</Text>
+          }
+          keyExtractor={(task) => task.id}
+          contentContainerStyle={styles.content}
+          ListHeaderComponent={
+            <View style={styles.header}>
+              <Text accessibilityRole="header" style={styles.heading}>Task starter</Text>
+              <Text style={styles.description}>
+                Tap a task to mark it complete. Tap again to bring it back.
+              </Text>
+              <View style={styles.filters}>
+                {filters.map((option) => (
+                  <Pressable
+                    key={option.value}
+                    accessibilityRole="button"
+                    accessibilityLabel={option.label}
+                    accessibilityState={{ selected: filter === option.value }}
+                    onPress={() => setFilter(option.value)}
+                    style={({ pressed }) => [
+                      styles.filterButton,
+                      filter === option.value && styles.selectedFilter,
+                      pressed && styles.pressedFilter,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.filterLabel,
+                        filter === option.value && styles.selectedFilterLabel,
+                      ]}
+                    >
+                      {option.label}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
+          }
+          renderItem={({ item }) => (
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityLabel={item.title}
+              accessibilityState={{ checked: item.completed }}
+              onPress={() => toggleTask(item.id)}
+              style={({ pressed }) => [
+                styles.task,
+                item.completed && styles.completedTask,
+                pressed && styles.pressedTask,
+              ]}
+            >
+              <View
+                accessible={false}
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+                style={[styles.checkbox, item.completed && styles.checkedBox]}
+              >
+                {item.completed && <Text allowFontScaling={false} style={styles.checkmark}>✓</Text>}
+              </View>
+              <View style={styles.taskCopy}>
+                <Text style={[styles.taskTitle, item.completed && styles.completedTitle]}>
+                  {item.title}
+                </Text>
+                <Text style={styles.taskStatus}>
+                  {item.completed ? 'Completed' : 'Not completed'}
+                </Text>
+              </View>
+            </Pressable>
+          )}
+          ListFooterComponent={
+            <Text style={styles.footer}>These tasks reset when you restart the app.</Text>
+          }
+        />
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: '#F7F8FA' },
+  content: {
+    flexGrow: 1,
+    width: '100%',
+    maxWidth: 600,
+    alignSelf: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 32,
+    paddingBottom: 24,
+    gap: 12,
+  },
+  header: { marginBottom: 20, gap: 12 },
+  filters: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  filterButton: {
+    minHeight: 48,
+    minWidth: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderWidth: 2,
+    borderColor: '#CBD3D8',
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+  },
+  selectedFilter: { borderColor: '#246247', backgroundColor: '#EDF5F1' },
+  pressedFilter: { opacity: 0.75 },
+  filterLabel: { fontSize: 16, color: '#172126' },
+  selectedFilterLabel: { fontWeight: '700' },
+  emptyMessage: { fontSize: 17, lineHeight: 26, color: '#46545C', paddingVertical: 20 },
+  heading: { fontSize: 32, fontWeight: '700', color: '#172126' },
+  description: { fontSize: 17, lineHeight: 26, color: '#46545C' },
+  task: {
+    minHeight: 80,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#CBD3D8',
+    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
+  },
+  completedTask: { backgroundColor: '#EDF5F1', borderColor: '#91B5A4' },
+  pressedTask: { backgroundColor: '#DEEAE5' },
+  checkbox: {
+    width: 28,
+    height: 28,
+    borderWidth: 2,
+    borderColor: '#586C63',
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkedBox: { backgroundColor: '#246247', borderColor: '#246247' },
+  checkmark: { fontSize: 18, fontWeight: '700', color: '#FFFFFF' },
+  taskCopy: { flex: 1, gap: 6 },
+  taskTitle: { fontSize: 18, fontWeight: '600', color: '#172126', flexShrink: 1 },
+  completedTitle: { textDecorationLine: 'line-through' },
+  taskStatus: { fontSize: 14, color: '#46545C' },
+  footer: { fontSize: 14, lineHeight: 22, color: '#46545C', marginTop: 12 },
+});

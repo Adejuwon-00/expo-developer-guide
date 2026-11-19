@@ -1,0 +1,74 @@
+import { fireEvent, render, screen } from '@testing-library/react-native';
+import App from '../App';
+
+const runTitle = 'Run the app on your phone';
+const completeTitle = 'Mark a task complete';
+const exploreTitle = 'Explore the starter code';
+
+async function selectFilter(name: string) {
+  await fireEvent.press(screen.getByRole('button', { name }));
+}
+
+test('starts on All and exposes the selected filter', async () => {
+  await render(<App />);
+  expect(screen.getAllByRole('checkbox')).toHaveLength(3);
+  expect(screen.getByRole('button', { name: 'All', selected: true })).toBeOnTheScreen();
+  expect(screen.getByRole('button', { name: 'Active', selected: false })).toBeOnTheScreen();
+  expect(screen.getByRole('button', { name: 'Completed', selected: false })).toBeOnTheScreen();
+});
+
+test('shows the matching tasks without changing their status', async () => {
+  await render(<App />);
+  await selectFilter('Active');
+  expect(screen.getByRole('button', { name: 'Active', selected: true })).toBeOnTheScreen();
+  expect(screen.getByRole('button', { name: 'All', selected: false })).toBeOnTheScreen();
+  expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+  expect(screen.getByRole('checkbox', { name: runTitle })).not.toBeChecked();
+  expect(screen.getByRole('checkbox', { name: completeTitle })).not.toBeChecked();
+  expect(screen.queryByRole('checkbox', { name: exploreTitle })).toBeNull();
+
+  await selectFilter('Completed');
+  expect(screen.getByRole('button', { name: 'Completed', selected: true })).toBeOnTheScreen();
+  expect(screen.getByRole('button', { name: 'Active', selected: false })).toBeOnTheScreen();
+  expect(screen.getAllByRole('checkbox')).toHaveLength(1);
+  expect(screen.getByRole('checkbox', { name: exploreTitle })).toBeChecked();
+
+  await selectFilter('All');
+  expect(screen.getAllByRole('checkbox')).toHaveLength(3);
+  expect(screen.getByRole('checkbox', { name: runTitle })).not.toBeChecked();
+  expect(screen.getByRole('checkbox', { name: exploreTitle })).toBeChecked();
+});
+
+test('removes completed tasks from Active and preserves them in All', async () => {
+  await render(<App />);
+  await selectFilter('Active');
+  await fireEvent.press(screen.getByRole('checkbox', { name: runTitle }));
+  expect(screen.queryByRole('checkbox', { name: runTitle })).toBeNull();
+  expect(screen.getByRole('checkbox', { name: completeTitle })).not.toBeChecked();
+  await fireEvent.press(screen.getByRole('checkbox', { name: completeTitle }));
+  expect(screen.queryAllByRole('checkbox')).toHaveLength(0);
+  expect(screen.getByText('No active tasks. Everything is complete.')).toBeOnTheScreen();
+  expect(screen.getByRole('button', { name: 'Active', selected: true })).toBeOnTheScreen();
+
+  await selectFilter('All');
+  expect(screen.getAllByRole('checkbox')).toHaveLength(3);
+  expect(screen.getByRole('checkbox', { name: runTitle })).toBeChecked();
+  expect(screen.getByRole('checkbox', { name: completeTitle })).toBeChecked();
+  expect(screen.getByRole('checkbox', { name: exploreTitle })).toBeChecked();
+  expect(screen.queryByText('No active tasks. Everything is complete.')).toBeNull();
+});
+
+test('removes reopened tasks from Completed and explains an empty view', async () => {
+  await render(<App />);
+  await selectFilter('Completed');
+  await fireEvent.press(screen.getByRole('checkbox', { name: exploreTitle }));
+  expect(screen.queryByRole('checkbox', { name: exploreTitle })).toBeNull();
+  expect(screen.queryAllByRole('checkbox')).toHaveLength(0);
+  expect(screen.getByText('No completed tasks yet.')).toBeOnTheScreen();
+  expect(screen.getByRole('button', { name: 'Completed', selected: true })).toBeOnTheScreen();
+
+  await selectFilter('All');
+  expect(screen.getAllByRole('checkbox')).toHaveLength(3);
+  expect(screen.getByRole('checkbox', { name: exploreTitle })).not.toBeChecked();
+  expect(screen.queryByText('No completed tasks yet.')).toBeNull();
+});

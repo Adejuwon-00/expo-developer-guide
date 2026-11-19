@@ -512,3 +512,119 @@ Only the quickstart and this record are included in the local commit. The
 introduction, filtering guide, example application, dependencies, navigation
 configuration, and uncommitted article are unchanged. No push, deployment,
 or external publication is part of this revision.
+
+## Filtering guide refinement and downloadable reference
+
+The guide now follows four Change, Why, Check stages: controls, matching
+rows, empty views, and behavior tests. Setup establishes Metro and the
+second-terminal validation routine once. Small state/list replacements and
+a complete list-header prop identify exact edit locations. The existing
+filter logic, controls, styles, task handler, IDs, and messages are preserved.
+
+Whitespace-based word counts changed from 2,275 to 1,685 for the body and
+from 2,300 to 1,710 including frontmatter. The revised guide has 15 balanced,
+language-tagged code blocks instead of 20. It preserves the initial-results
+table, both explicit empty-state checks, and native accessibility guidance.
+
+### Reference format and maintenance
+
+`public/references/task-filtering/` contains `App.tsx.txt`,
+`Filtering.test.tsx.txt`, and a repository `README.md`. The guide links the
+two text assets directly. Readers save them as `App.tsx` and
+`__tests__/Filtering.test.tsx` in the existing starter; replacing the screen
+skips the implementation checkpoints. The original `App.test.tsx` stays in
+place. No second app, package manifest, dependency, or configuration change
+was introduced. Text extensions keep references outside root TypeScript and
+Jest discovery; validation checks their actual TypeScript filenames in the
+isolated app.
+
+The first preview exposed a direct README link returning 404: Thally handles
+`.md` URLs through its documentation routes. The guide's unnecessary README
+link was removed; the file mapping is already present in the guide. The
+README remains a repository maintenance document. No runtime workaround was
+added. Content validation and the production build passed again afterward.
+Both `.txt` download routes return HTTP 200 with text/plain content and bytes
+identical to the reference source files.
+
+When the starter or guide changes, regenerate or revise the reference from
+the actual tutorial edits, compare both completed files byte for byte, and
+rerun intermediate checkpoints, test progression, and platform exports. The
+README records the same maintenance process. These references are a checked
+snapshot of this lesson, not an independently configured application.
+
+### Isolated tutorial checks
+
+The existing separate validation checkout at `../phase-3-validation` was
+restored from the current committed starter's tracked files. Its installed
+packages were reused after confirming package and lockfile equality; no new
+clean install is claimed. The maintained starter was never edited.
+
+Temporary validation code outside the maintained repository extracted the
+revised code blocks, asserted unique replacement anchors, and applied them
+in published order. Named additional test blocks came from the linked full
+reference suite, following the guide's copy instructions. Temporary behavior
+tests were removed before counting the published suites.
+
+| Stage | Actual result |
+| --- | --- |
+| Restored starter | TypeScript, lint, original four tests passed |
+| 1: controls | TypeScript, lint, original four tests passed; one temporary test confirmed selection changes while three rows and task states remain |
+| 2: matching tasks | TypeScript, lint, original four tests passed; two temporary tests confirmed matching rows and completing/reopening membership changes |
+| 3: empty results | TypeScript, lint, original four tests passed; two temporary tests confirmed both messages, selected controls, and state preservation in All |
+| 4a: initial-selection test | TypeScript, lint, two suites and five tests passed |
+| 4b: matching-view test | TypeScript, lint, two suites and six tests passed |
+| 4c: transition/empty tests | TypeScript, lint, two suites and eight tests passed |
+| Completed files | Assembled App and filtering suite matched reference bytes exactly |
+| Reference replacement | Copying both downloads into the isolated starter passed TypeScript, lint, and all eight tests |
+| Android export | Passed; 603 modules, Hermes bundle and metadata generated |
+| iOS export | Passed; 605 modules, Hermes bundle and metadata generated |
+
+The validation routine was `npm.cmd run typecheck`, `npm.cmd run lint`, and
+`npm.cmd test`. Temporary checks additionally used
+`npm.cmd test -- --runTestsByPath __tests__/Checkpoint.test.tsx`.
+Exports used `npx.cmd --no-install expo export --platform android
+--output-dir dist-refined-android` and the corresponding iOS command with
+`--platform ios --output-dir dist-refined-ios`. These are automated exports,
+not native builds installed on devices or simulator execution.
+
+### Documentation checks
+
+- Root `npm.cmd run typecheck` passed.
+- Root `npm.cmd run lint` exited 0 with zero errors and the same 11 existing
+  warnings: ten unused disable directives in the two scripts and one missing
+  effect dependency in the unchanged admin settings component.
+- Root `npm.cmd run check -- --ci` reported zero errors and warnings, including
+  after the README link correction.
+- Root `npm.cmd run build` passed after the final guide correction: three
+  authored MDX modules and 47 generated routes/pages.
+- Markdown parsing confirmed 15 code blocks and balanced fences. All five
+  distinct external guide destinations returned HTTP 200. Reference README
+  links were checked against their intended destinations.
+- `npm.cmd start -- --port 3045` started the production preview. The guide
+  returned HTTP 200 with one H1 and all four stages. Both reference links and
+  the quickstart link resolved; downloaded source bytes matched local files.
+- The GUIDE sidebar order, active-page markers, headings, previous/next links,
+  branding, and absence of breadcrumbs/group labels passed on all lessons.
+- Full-text `filtering` and `Expo Go` each returned three results with working
+  destinations. `refinedqzxvnomatch987654` returned zero results without error.
+- Whitespace and final file-scope checks passed before the local commit.
+
+### Warnings and limits
+
+The browser connection timed out before a usable session was established.
+Desktop/mobile appearance, code overflow, keyboard interaction, larger text,
+scrolling, safe areas, VoiceOver/TalkBack announcements, and focus after a
+row disappears remain manual checks. The previous reported iPhone test
+applies to the unfiltered starter; it supplies no new filter or accessibility
+results. Android device and simulator checks remain unverified.
+
+The production embedding step still skips through the server-only guard, and
+the middleware deprecation remains. Export workers repeated the environment's
+FORCE_COLOR/NO_COLOR warning; both exports passed. Existing root/example
+audit records remain unchanged; no new audit or dependency fix was performed.
+No semantic-search verification is claimed.
+
+Only the filtering guide, three reference files, and this validation update
+are included in the local commit. The unfiltered starter, introduction,
+quickstart, article, dependencies, navigation, and framework files remain
+unchanged. No push, external publication, or deployment was performed.
