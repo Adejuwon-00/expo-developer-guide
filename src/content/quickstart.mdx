@@ -9,17 +9,20 @@ you can mark complete or bring back.
 ## Before you begin
 
 - Install [Git](https://git-scm.com/downloads) and Node.js with npm. This
-  example was checked with **Node.js 22.16.0 and npm 10.9.2**. Its Node engine
-  accepts `^22.13.0 || ^24.3.0 || ^26.0.0 || >=27.0.0`; use the checked Node 22
-  environment to reproduce these instructions.
+  example was checked with **Node.js 22.16.0 and npm 10.9.2**. Use that
+  environment to reproduce the checks; the example's `package.json` lists
+  other accepted Node.js versions.
 - Install [Expo Go](https://expo.dev/go) with **Expo SDK 58** support. The
   example locks Expo 58.0.26, React 19.3.0, and React Native 0.88.1. Resolve a
   client mismatch before proceeding; don't upgrade the example at random.
+- For a physical iPhone, have an Expo account ready. Expo CLI and Expo Go
+  must use the same account; the sign-in step below follows
+  [Expo's current device instructions](https://docs.expo.dev/get-started/start-developing/).
 - Connect your phone and computer to the same Wi-Fi network.
 
-You don't need a Thally account, an Expo account, Xcode, or Android Studio
-for this local Expo Go workflow. The commands work in a terminal on Windows,
-macOS, or Linux; this project's automated checks ran on Windows.
+You don't need a Thally account, Xcode, or Android Studio for this Expo Go
+workflow. Expo supports development on Windows, macOS, and Linux; this
+project's automated checks ran on Windows.
 
 ## Clone and install the example
 
@@ -39,6 +42,17 @@ Installation can report dependency advisories and deprecation warnings. The
 [validation notes](https://github.com/Adejuwon-00/expo-developer-guide/blob/main/assessment/phase-2-validation.md)
 record existing findings. Don't run `npm audit fix --force`; its proposed
 changes can replace compatible Expo and test-tooling versions.
+
+## Sign in for an iPhone
+
+After installation, run this from `examples/expo-task-starter`:
+
+```sh
+npx expo login
+```
+
+Complete the CLI's sign-in flow, then open Expo Go on your iPhone and sign in
+to the same Expo account through its account icon. If you're following the Android path, continue to the next step.
 
 ## Start Expo
 
@@ -61,14 +75,14 @@ Go. Allow local-network access if iOS asks. Keep the development server running.
 
 Open Expo Go and use its QR scanner to scan the terminal code. This follows
 [Expo's device workflow](https://docs.expo.dev/get-started/start-developing/).
-Physical Android testing has not been completed for this project.
 
 <Note type="info" title="What has been verified">
-The project author reported successfully launching and testing the starter
-on a physical iPhone through Expo Go. The model, iOS version, and individual
-smoke-test results weren't supplied. Automated tests cover task state, and
-Android and iOS bundles and development manifests passed checks. Those checks
-don't establish device accessibility, layout, or interaction behavior.
+The project author reported a successful iPhone Expo Go launch and test,
+without a device model, iOS version, sign-in details, or individual behavior
+results. Automated task tests, Android/iOS bundles, and development manifests
+passed. The screen checks below are expected behavior to verify yourself;
+device interactions, reloads, layout, and accessibility weren't individually
+confirmed. Physical Android and simulator testing remain unverified.
 </Note>
 
 ## Check the screen
@@ -83,16 +97,13 @@ You should see **Task starter**, the instruction to tap a task, and these rows:
 
 Tap a row. Its checkbox, text treatment, and status should change together.
 Tap it again to reverse the change. Other tasks should keep their state.
-These are expected results to check, not a claim that each behavior was
-individually confirmed in the reported iPhone test.
 
 Press `r` in the terminal for a full reload: the initial tasks should return.
 There is no persistence. Returning from the background or using Fast Refresh
 may keep state. Press `Ctrl+C` to stop the server.
 
 Use the [example README checklist](https://github.com/Adejuwon-00/expo-developer-guide/blob/main/examples/expo-task-starter/README.md#check-on-both-phones)
-for larger text, safe areas, and VoiceOver or TalkBack. Those individual device
-checks remain unconfirmed.
+for larger text, safe areas, and VoiceOver or TalkBack.
 
 ## If something gets stuck
 
@@ -106,7 +117,16 @@ The repository root runs Thally, not the mobile app.
 
 If PowerShell reports that scripts are disabled, run `npm.cmd ci` and
 `npm.cmd start` instead of `npm ci` and `npm start`. These invoke the same npm
-installation without changing your system execution policy.
+installation without changing your system execution policy. For the login
+command, use `npx.cmd expo login` if PowerShell also blocks `npx.ps1`.
+
+### Expo Go asks you to sign in or reports an account mismatch
+
+On a physical iPhone, use the same Expo account in the CLI and Expo Go. Run
+`npx expo login` from the example directory, sign in through Expo Go's account
+icon, then press **Try Again** on the account error. Follow the specific error
+message if it identifies which side needs signing in. See
+[Expo's account recovery instructions](https://docs.expo.dev/get-started/start-developing/#having-problems).
 
 ### Expo Go can't reach the server
 

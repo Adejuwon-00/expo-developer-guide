@@ -17,6 +17,10 @@ Finish the [quickstart](/quickstart) first. Work in
 `__tests__/App.test.tsx` contains four behavior tests. The repository's starter
 has no filtering; this guide adds it in your local copy.
 
+Keep Expo running in its terminal while you edit. If you stopped it after
+the quickstart, run `npm start` again. Open a second terminal, enter
+`examples/expo-task-starter`, and use that terminal for the checks below.
+
 Run the existing checks before changing anything:
 
 ```sh
@@ -103,11 +107,10 @@ the description's closing `</Text>` and before the header's closing `</View>`:
 </View>
 ```
 
-`Pressable`, `Text`, and `View` are already imported. Each control announces
-its label and selected state through React Native's accessibility properties.
-The selected control also has a stronger border and heavier text, so the
-visual distinction isn't only a change of color. Native screen-reader
-announcements still need checking on a device.
+`Pressable`, `Text`, and `View` are already imported. The accessibility
+properties expose each control's label and selected state. The selected
+control also uses a green border, a tinted background, and heavier text, so
+the visual distinction isn't only a change of color.
 
 Add these entries inside the existing `StyleSheet.create({ ... })` object,
 before its closing `});`. Keep the existing styles:
@@ -269,9 +272,16 @@ complete task array.
 
 ## Check the interaction on your phone
 
-With `npm start` running, check each filter, complete both active tasks, and
-reopen the completed task after a full reload. Confirm the relevant empty
-message appears and that you can return to All without losing tasks.
+With `npm start` running, check both empty states separately:
+
+1. Press `r` in the Metro terminal for a full reload. Select **Active** and
+   complete **Run the app on your phone**, then **Mark a task complete**.
+   Each row should disappear. You should see **No active tasks. Everything
+   is complete.** Select **All** and confirm all three tasks are complete.
+2. Reload again to restore the initial tasks and the All filter. Select
+   **Completed**, then tap **Explore the starter code** to reopen it. You
+   should see **No completed tasks yet.** Return to **All** and confirm all
+   three tasks are present and incomplete.
 
 Also increase the system text size and check wrapping, scrolling, and safe
 areas. With VoiceOver or TalkBack, check each filter's label and selected
@@ -279,9 +289,13 @@ state, then activate a task that disappears from the current view. Observe
 where accessibility focus moves; a passing mocked test can't establish that
 native behavior.
 
-The tutorial's code is validated in an isolated copy. Its completed version
-isn't substituted for the repository's starting app, and the earlier iPhone
-report doesn't verify these newly added filters on a physical device.
+<Note type="info" title="What these checks establish">
+The tutorial passed TypeScript, lint, eight mocked behavior tests, and Android
+and iOS bundle generation in an isolated copy. The committed starter remains
+unfiltered. The earlier iPhone report applies to that starter, not these
+filters. Native interaction, reloads, layout, screen-reader announcements,
+and focus behavior for the filtering solution remain unverified.
+</Note>
 
 ## Why this stays small
 

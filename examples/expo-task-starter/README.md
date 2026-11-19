@@ -19,11 +19,21 @@ From the repository root:
 ```sh
 cd examples/expo-task-starter
 npm ci
-npm start
 ```
 
 This directory has its own dependencies and lockfile. Installing dependencies
 in the repository root runs the Thally setup, not this example's setup.
+
+For a physical iPhone, [Expo's current instructions](https://docs.expo.dev/get-started/start-developing/)
+require matching Expo accounts in the CLI and Expo Go. Run `npx expo login`
+from this directory and sign in to the same account in Expo Go. This follows
+official guidance; the earlier iPhone report didn't specify sign-in details.
+
+Then start the server:
+
+```sh
+npm start
+```
 
 Keep the terminal open and connect your computer and phone to the same Wi-Fi
 network. Metro prints a QR code and connection address.
@@ -102,4 +112,6 @@ tooling fixes, and remaining dependency warnings.
 Learning path: [Introduction](https://expo-developer-guide.thally.app/introduction),
 [Quickstart](https://expo-developer-guide.thally.app/quickstart), and
 [Build and test task filtering](https://expo-developer-guide.thally.app/guides/task-filtering).
-The filtering lesson extends this starter locally; the committed app remains unfiltered.
+The filtering lesson extends this starter locally; the committed app remains
+unfiltered. These Phase 3 lessons are available in the repository's
+`src/content/` for local review; their new content hasn't been deployed yet.

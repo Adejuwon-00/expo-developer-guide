@@ -145,3 +145,48 @@ focus after a task disappears on a real device.
 The new lesson and README links target the intended public URLs. Their Phase 3
 content is only validated locally until the commit is reviewed, pushed, and
 deployed. No new Cloud deployment or production revision was verified.
+
+## Final editorial review
+
+The follow-up review clarified the React/TypeScript audience, reduced repeated
+verification caveats, and made the guide's two empty-state checks explicit.
+It also explained the second-terminal workflow and replaced the claim that
+filter controls announce their state with a description of the properties
+exposed to accessibility services. Native announcements remain unverified.
+The READMEs now distinguish this local revision from the existing Cloud site;
+the root README links directly to lesson source and local review instructions.
+
+The review found a factual omission in the earlier quickstart: its statement
+that no Expo account was required conflicts with
+[Expo's current physical-iPhone instructions](https://docs.expo.dev/get-started/start-developing/).
+The quickstart and example README now require matching accounts in Expo CLI
+and Expo Go for that path. The quickstart places sign-in after installation
+and before server startup, and includes account-mismatch recovery. The earlier
+reported iPhone test supplied no authentication details; it is not evidence
+that these sign-in instructions were tested on a device.
+
+From the example directory, `npx.cmd --no-install expo login --help` exited
+successfully and showed `npx expo login` as the supported command, with browser
+sign-in as the default. This checked the installed CLI only. No login,
+credential storage, or account change was performed.
+
+All nine fenced blocks in the filtering guide were compared with commit
+`9eab3a7` and match exactly. The existing eight-test tutorial results and
+platform exports remain applicable to those unchanged snippets; they were
+not rerun for prose edits. Application source, tests, dependencies, lockfiles,
+framework files, and navigation configuration remain unchanged.
+
+Changed relative README links resolve to files, and internal lesson targets
+match the existing routes. TypeScript passed, and Thally validation reported
+zero errors and warnings on both runs, including after the last wording
+adjustments. The production build passed with three authored MDX modules and
+47 generated routes/pages. It retained the optional embedding skip and
+middleware warning documented above. `git diff --check` passed. The final
+diff contains only the three lesson pages, both READMEs, and this record.
+
+Visual review remains outstanding: desktop/mobile readability, code overflow,
+keyboard navigation, and pagination. Account sign-in on a physical iPhone,
+filter interactions and reloads, larger text, safe areas, screen-reader
+announcements, and focus after a task disappears remain unverified. No new
+browser or device results are claimed. Existing audit and embedding notes
+above remain in effect. No push or publishing action is part of this review.

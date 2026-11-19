@@ -1,11 +1,16 @@
 # Expo for React Developers
 
 A practical learning resource for React developers building their first mobile
-app with Expo and React Native. The documentation is published with Thally.
+app with Expo and React Native. The documentation uses Thally.
 
-- [Introduction](https://expo-developer-guide.thally.app/introduction)
-- [Run the app on your phone](https://expo-developer-guide.thally.app/quickstart)
-- [Build and test task filtering](https://expo-developer-guide.thally.app/guides/task-filtering)
+Read the lessons in this revision:
+
+- [Introduction](src/content/introduction.mdx)
+- [Run the app on your phone](src/content/quickstart.mdx)
+- [Build and test task filtering](src/content/guides/task-filtering.mdx)
+
+Existing site: https://expo-developer-guide.thally.app. The Phase 3 lessons
+are committed locally for review and haven't been pushed or verified on Cloud.
 
 The [Expo task starter](examples/expo-task-starter/README.md) is an independent
 application with its own dependencies and lockfile. It has completion toggles
@@ -21,7 +26,8 @@ npm ci
 npm start
 ```
 
-Follow the example README for Expo Go setup and checks. Installing dependencies
+Follow the example README for Expo Go setup and checks, including the matching
+Expo account requirement for physical iPhone use. Installing dependencies
 at the repository root doesn't install the example's dependencies.
 
 ## Work on the documentation
@@ -36,12 +42,17 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:3040. If PowerShell blocks `npm.ps1`, use `npm.cmd` in
+Open http://localhost:3040. Review the introduction, follow the quickstart,
+then read the filtering guide. The app stays unfiltered until you apply the
+guide locally. The [validation record](assessment/phase-3-validation.md)
+separates completed checks from the remaining visual and device review.
+
+If PowerShell blocks `npm.ps1`, use `npm.cmd` in
 place of `npm`; you don't need to change the system execution policy.
 
 Pages live in `src/content/`, navigation in `docs.json`, and site identity in
-`src/data/site.ts`. The published learning path uses the same source as the
-local preview.
+`src/data/site.ts`. These authored files are the source for the local preview
+and the next deployment.
 
 Before committing documentation changes:
 
